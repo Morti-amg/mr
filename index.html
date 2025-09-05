@@ -65,10 +65,9 @@ header {
   color:black;
 }
 .jokes-bar span { display:inline-block; white-space:nowrap; }
-@keyframes marqueeLTR { from { transform:translateX(-100%); } to { transform:translateX(100%); } }
-@keyframes marqueeRTL { from { transform:translateX(100%); } to { transform:translateX(-100%); } }
+@keyframes marquee { from { transform:translateX(100%); } to { transform:translateX(-100%); } }
+@keyframes marqueeRTL { from { transform:translateX(-100%); } to { transform:translateX(100%); } }
 
-/* کارت و راهنما */
 .card-wrapper {
   display: flex;
   flex-direction: column;
@@ -97,54 +96,42 @@ header {
 }
 .card.flipped { transform:rotateY(180deg); }
 .card .front, .card .back {
-  position:absolute; 
-  backface-visibility:hidden; 
-  width:100%; 
-  text-align:center; 
+  position:absolute;
+  backface-visibility:hidden;
+  width:100%;
+  height:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:15px;
+  overflow:hidden;
+  text-align:center;
 }
-.card .back { 
-  transform:rotateY(180deg); 
-  font-size:1.3em; 
-  color:black; 
-  display:flex; 
-  flex-direction:column; 
-  gap:10px;
+.card .front { font-size:2em; color:black; }
+.card .back {
+  transform:rotateY(180deg);
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  font-size:1.3em;
+  color:black;
 }
-.card .back span.fa { color:#4caf50; font-weight:bold; }
-.card .back span.en { color:#007bff; font-style:italic; }
-.card .back span.de { color:#e91e63; font-weight:bold; }
+.card .back .lang-text { font-weight:bold; }
 
 #guide { font-size: 1em; margin-bottom: 10px; text-align:center; color:black; }
 #motivational { margin-top:10px; font-size:1.2em; text-align:center; opacity:0; transition:opacity 0.5s; }
-
-/* کنترل‌ها */
 .controls { display:flex; gap:10px; align-items:center; margin-top:20px; flex-wrap:wrap; justify-content:center; }
 button, select, input { padding:8px 15px; border-radius:6px; border:none; cursor:pointer; font-size:1em; }
 button { background-color:#ff9800; color:white; }
 #hardBtn { background-color:#e91e63; }
 select { background:white; color:black; border:1px solid black; }
 .stats { margin-top:15px; font-size:1em; background:rgba(0,0,0,0.1); padding:8px 12px; border-radius:10px; color:black; }
-.add-sentence { margin-top:20px; display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }
-.add-sentence input, .add-sentence button { font-size:1em; }
-.add-sentence input { padding:6px; border-radius:5px; border:1px solid #ccc; width:200px; color:black; }
-.add-sentence button { background:#4caf50; color:white; }
-.login-container { margin-top:20px; display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }
-.login-container input, .login-container button { font-size:1em; padding:6px; border-radius:5px; border:1px solid #ccc; }
-.login-container input { color:black; }
-.login-container button { background:#2196f3; color:white; }
-#languageGuide { color:black; text-align:center; margin-bottom:5px; }
 </style>
 </head>
 <body>
 <header>MORTI //// AMG</header>
-
-<div class="welcome" id="welcome">
-سلام دوست گرامی به سایت من خوش آمدی  
-امیدوارم از یادگیری زبان لذت ببری
-</div>
-
+<div class="welcome" id="welcome">سلام دوست گرامی به سایت من خوش آمدی. امیدوارم از یادگیری زبان لذت ببری</div>
 <div class="jokes-bar"><span id="jokes"></span></div>
-
 <div class="card-wrapper">
   <div id="guide"></div>
   <div class="card-container">
@@ -155,7 +142,6 @@ select { background:white; color:black; border:1px solid black; }
   </div>
   <div id="motivational"></div>
 </div>
-
 <div class="controls">
   <div id="languageGuide"></div>
   <select id="language" onchange="changeLanguage()">
@@ -167,196 +153,85 @@ select { background:white; color:black; border:1px solid black; }
   <button onclick="nextCard()" id="nextBtn">بعدی</button>
   <button id="hardBtn" onclick="markHard()">سخت</button>
 </div>
-
-<div class="stats" id="stats">پیشرفت: 0% | سخت: 0</div>
-
-<div class="login-container" id="loginContainer">
-  <input type="text" id="username" placeholder="Username">
-  <input type="password" id="password" placeholder="Password">
-  <button onclick="login()">Login</button>
-</div>
-
-<div class="add-sentence" id="addSentenceContainer" style="display:none;">
-  <input type="text" id="enInput" placeholder="English sentence">
-  <input type="text" id="deInput" placeholder="German sentence">
-  <input type="text" id="faInput" placeholder="Farsi sentence">
-  <button onclick="addSentence()">➕ Add Sentence</button>
-</div>
+<div class="stats" id="stats"></div>
 
 <script>
-// === داده‌ها ===
 const sentences=[
-{ text:{ en:"Do I need to go through security again for my connecting flight?", de:"Muss ich für meinen Anschlussflug nochmal durch die Sicherheitskontrolle?", fa:"برای پرواز بعدی باید دوباره از کنترل امنیت عبور کنم؟" }, difficulty:"easy" },  
-{ text:{ en:"Can you help me with my luggage?", de:"Können Sie mir mit meinem Gepäck helfen?", fa:"می‌توانید با چمدانم کمک کنید؟" }, difficulty:"easy" }, 
-{ text:{ en:"Which gate is for flight number 123?", de:"Welches Gate ist für Flugnummer 123?", fa:"گیت پرواز شماره ۱۲۳ کدام است؟" }, difficulty:"easy" },  
-{ text:{ en:"What time does the flight to Berlin leave?", de:"Wann geht der Flug nach Berlin?", fa:"پرواز به برلین چه ساعتی حرکت می‌کند؟" }, difficulty:"easy" },
-{ text:{ en:"Hello!", de:"Hallo!", fa:"سلام!" }, difficulty:"easy" },
-{ text:{ en:"How are you?", de:"Wie geht's?", fa:"چطوری؟" }, difficulty:"easy" },
-{ text:{ en:"I love programming.", de:"Ich liebe Programmieren.", fa:"من برنامه نویسی را دوست دارم." }, difficulty:"medium" },
-{ text:{ en:"Goodbye!", de:"Auf Wiedersehen!", fa:"خداحافظ!" }, difficulty:"easy" },
-{ text:{ en:"This is challenging.", de:"Das ist herausfordernd.", fa:"این چالش‌برانگیز است." }, difficulty:"hard" },
-{ text:{ en:"Learning languages is fun.", de:"Sprachen lernen macht Spaß.", fa:"یادگیری زبان‌ها سرگرم‌کننده است." }, difficulty:"medium" }
+  { text:{ en:"Do I need to go through security again for my connecting flight?", de:"Muss ich für meinen Anschlussflug nochmal durch die Sicherheitskontrolle?", fa:"برای پرواز بعدی باید دوباره از کنترل امنیت عبور کنم؟" }, difficulty:"easy" },
+  { text:{ en:"Can you help me with my luggage?", de:"Können Sie mir mit meinem Gepäck helfen?", fa:"می‌توانید با چمدانم کمک کنید؟" }, difficulty:"easy" },
+  { text:{ en:"Which gate is for flight number 123?", de:"Welches Gate ist für Flugnummer 123?", fa:"گیت پرواز شماره ۱۲۳ کدام است؟" }, difficulty:"easy" }
 ];
 
-const jokesData={
-  en:["Why don’t programmers like nature? Too many bugs! 😂",
-      "I told my computer I needed a break, it froze! 🥶",
-      "Debugging: Being the detective in a crime movie where you are also the murderer. 🔍"],
-  de:["Warum mögen Programmierer die Natur nicht? Zu viele Bugs! 🐞",
-      "Ich sagte meinem Computer, ich brauche eine Pause – er stürzte ab! 💻",
-      "Debuggen: Detektiv in einem Krimi sein, in dem man selbst der Mörder ist. 🔍"],
-  fa:["چرا برنامه‌نویس‌ها طبیعت رو دوست ندارن؟ چون پر از باگه! 🐞",
-      "به کامپیوترم گفتم استراحت می‌خوام، یهو هنگ کرد! 💻",
-      "دیباگ یعنی کارآگاه بودن در فیلم جنایی که خودت قاتلی! 🔍"]
+const jokes={
+  en:["Why don’t programmers like nature? Too many bugs! 😂"],
+  de:["Warum mögen Programmierer die Natur nicht? Zu viele Bugs! 🐞"],
+  fa:["چرا برنامه‌نویس‌ها طبیعت رو دوست ندارن؟ چون پر از باگه! 🐞"]
 };
 
-const motivationalSentences = {
-  en:["Keep going! 😂 You can do it!","Every step counts! 😂","Learning is fun! 😂"],
-  de:["Mach weiter! 😂 Du schaffst das!","Jeder Schritt zählt! 😂","Lernen macht Spaß! 😂"],
-  fa:["ادامه بده! 😂 تو می‌توانی!","هر قدم مهم است! 😂","یادگیری سرگرم‌کننده است! 😂"]
-};
-
-const backgrounds=[
-  'https://source.unsplash.com/1600x900/?nature',
-  'https://source.unsplash.com/1600x900/?city',
-  'https://source.unsplash.com/1600x900/?mountains',
-  'https://source.unsplash.com/1600x900/?ocean'
-];
-
-let current=0, lang='fa', hardCards=[], knownCards=[], customSentences=[];
-let allSentences=[...sentences,...customSentences];
+let current=0;
+let lang='fa';
+let hardCards=[];
+let allSentences=[...sentences];
 
 const card=document.getElementById('flashCard');
 const front=document.getElementById('front');
 const back=document.getElementById('back');
 const stats=document.getElementById('stats');
 const jokesSpan=document.getElementById('jokes');
-const guide=document.getElementById('guide');
 const nextBtn=document.getElementById('nextBtn');
 const prevBtn=document.getElementById('prevBtn');
 const hardBtn=document.getElementById('hardBtn');
-const languageGuide=document.getElementById('languageGuide');
-const motivationalDiv=document.getElementById('motivational');
 
-// === کارت‌ها ===
-function adjustFontSize(el){
+function fitText(el){
   let size=28;
-  el.style.fontSize=size+'px';
-  while(el.scrollHeight>el.offsetHeight && size>12){
+  el.style.fontSize=size+"px";
+  while(el.scrollHeight>el.clientHeight || el.scrollWidth>el.clientWidth){
     size-=1;
-    el.style.fontSize=size+'px';
+    el.style.fontSize=size+"px";
+    if(size<12) break;
   }
 }
 
 function updateCard(){
-  front.textContent = allSentences[current].text[lang];
-  adjustFontSize(front);
-
+  front.textContent=allSentences[current].text[lang];
+  fitText(front);
+  back.innerHTML='';
   const otherLangs=['en','de','fa'].filter(l=>l!==lang);
-  back.innerHTML = `
-    <span class="${otherLangs[0]}">${allSentences[current].text[otherLangs[0]]}</span>
-    <span class="${otherLangs[1]}">${allSentences[current].text[otherLangs[1]]}</span>
-  `;
-  Array.from(back.children).forEach(span=>adjustFontSize(span));
-
-  updateStats(); updateGuide(); updateLanguageGuide();
-  updateNextButton(); updatePrevButton(); updateHardButton();
+  otherLangs.forEach(l=>{
+    const div=document.createElement('div');
+    div.innerHTML=`<span class="lang-text">${l.toUpperCase()}:</span> ${allSentences[current].text[l]}`;
+    back.appendChild(div);
+  });
+  fitText(back);
+  updateStats();
+  updateButtons();
 }
-
 function flipCard(){ card.classList.toggle('flipped'); }
 function nextCard(){ card.classList.remove('flipped'); current=(current+1)%allSentences.length; updateCard(); }
 function prevCard(){ card.classList.remove('flipped'); current=(current-1+allSentences.length)%allSentences.length; updateCard(); }
-
 function changeLanguage(){ lang=document.getElementById('language').value; updateCard(); initJokes(); }
 function markHard(){ if(!hardCards.includes(current)) hardCards.push(current); updateStats(); }
 
 function updateStats(){
-  let progress=Math.round((knownCards.length/allSentences.length)*100);
-  if(lang==='fa'){ stats.textContent=`پیشرفت: ${progress}% | سخت: ${hardCards.length}`; }
-  else if(lang==='en'){ stats.textContent=`Progress: ${progress}% | Hard: ${hardCards.length}`; }
-  else if(lang==='de'){ stats.textContent=`Fortschritt: ${progress}% | Schwer: ${hardCards.length}`; }
+  if(lang==='fa') stats.textContent=`پیشرفت: 0% | سخت: ${hardCards.length}`;
+  else if(lang==='en') stats.textContent=`Progress: 0% | Hard: ${hardCards.length}`;
+  else if(lang==='de') stats.textContent=`Fortschritt: 0% | Schwer: ${hardCards.length}`;
 }
 
-// === راهنما ===
-function updateGuide(){
-  if(lang==='fa'){ guide.textContent="روی کارت کلیک کن تا ترجمه نمایش داده شود. سپس روی 'بعدی' یا 'قبلی' بزن."; }
-  else if(lang==='en'){ guide.textContent="Click on the card to see the translation. Then press 'Next' or 'Previous'."; }
-  else if(lang==='de'){ guide.textContent="Klicke auf die Karte, um die Übersetzung zu sehen. Drücke dann 'Nächste' oder 'Vorherige'."; }
-}
-function updateLanguageGuide(){
-  if(lang==='fa'){ languageGuide.textContent="زبان مورد نظر خود را انتخاب کنید:"; }
-  else if(lang==='en'){ languageGuide.textContent="Select your preferred language:"; }
-  else if(lang==='de'){ languageGuide.textContent="Wähle deine Sprache:"; }
-}
-function updateNextButton(){
-  if(lang==='fa'){ nextBtn.textContent="بعدی"; }
-  else if(lang==='en'){ nextBtn.textContent="Next"; }
-  else if(lang==='de'){ nextBtn.textContent="Nächste"; }
-}
-function updatePrevButton(){
-  if(lang==='fa'){ prevBtn.textContent="قبلی"; }
-  else if(lang==='en'){ prevBtn.textContent="Previous"; }
-  else if(lang==='de'){ prevBtn.textContent="Vorherige"; }
-}
-function updateHardButton(){
-  if(lang==='fa'){ hardBtn.textContent="سخت"; }
-  else if(lang==='en'){ hardBtn.textContent="Hard"; }
-  else if(lang==='de'){ hardBtn.textContent="Schwer"; }
+function updateButtons(){
+  if(lang==='fa'){ nextBtn.textContent="بعدی"; prevBtn.textContent="قبلی"; hardBtn.textContent="سخت"; }
+  else if(lang==='en'){ nextBtn.textContent="Next"; prevBtn.textContent="Previous"; hardBtn.textContent="Hard"; }
+  else if(lang==='de'){ nextBtn.textContent="Nächste"; prevBtn.textContent="Vorherige"; hardBtn.textContent="Schwer"; }
 }
 
-// === جوک‌ها ===
 function initJokes(){
-  jokesSpan.textContent=jokesData[lang].join("   ⚡   ");
-  if(lang==='fa'){ jokesSpan.style.animation='marqueeLTR 40s linear infinite'; }
-  else{ jokesSpan.style.animation='marqueeRTL 40s linear infinite'; }
+  jokesSpan.textContent=jokes[lang].join("   ⚡   ");
+  if(lang==='fa'){ jokesSpan.style.animation='marqueeRTL 20s linear infinite'; }
+  else{ jokesSpan.style.animation='marquee 20s linear infinite'; }
 }
 
-// === پس‌زمینه ===
-let bgIndex=0;
-function changeBackground(){ bgIndex=(bgIndex+1)%backgrounds.length; document.body.style.backgroundImage=`url('${backgrounds[bgIndex]}')`; }
-setInterval(changeBackground,10000);
-document.body.style.backgroundImage=`url('${backgrounds[bgIndex]}')`;
-
-// === ورود مدیر ===
-const ADMIN_USERNAME='admin', ADMIN_PASSWORD='1234';
-function login(){
-  const u=document.getElementById('username').value;
-  const p=document.getElementById('password').value;
-  if(u===ADMIN_USERNAME && p===ADMIN_PASSWORD){
-    alert("ورود موفق ✅");
-    document.getElementById('loginContainer').style.display='none';
-    document.getElementById('addSentenceContainer').style.display='flex';
-  } else { alert("نام کاربری یا رمز اشتباه ❌"); }
-}
-
-// === اضافه کردن جمله ===
-function addSentence(){
-  const en=document.getElementById('enInput').value.trim();
-  const de=document.getElementById('deInput').value.trim();
-  const fa=document.getElementById('faInput').value.trim();
-  if(!en||!de||!fa){ alert("لطفا هر سه زبان را پر کنید!"); return; }
-  const newSentence={text:{en,de,fa}, difficulty:'custom'};
-  customSentences.push(newSentence);
-  allSentences.push(newSentence);
-  alert("✅ جمله اضافه شد!");
-  document.getElementById('enInput').value='';
-  document.getElementById('deInput').value='';
-  document.getElementById('faInput').value='';
-  updateCard();
-}
-
-// === جملات انگیزشی ===
-function showMotivational(){
-  const sentence = motivationalSentences[lang][Math.floor(Math.random()*motivationalSentences[lang].length)];
-  motivationalDiv.textContent = sentence;
-  motivationalDiv.style.opacity = '1';
-  setTimeout(()=>{ motivationalDiv.style.opacity='0'; }, 4000);
-}
-setInterval(showMotivational, 60000);
-setTimeout(showMotivational, 1000);
-
-// === اجرای اولیه ===
-updateCard(); initJokes();
+updateCard();
+initJokes();
 </script>
 </body>
 </html>
