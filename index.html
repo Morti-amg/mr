@@ -19,14 +19,6 @@ body {
   overflow-x:hidden;
   background-color:white;
 }
-@keyframes ledColor {
-  0% { color: #ff0000; }
-  20% { color: #00ff00; }
-  40% { color: #0000ff; }
-  60% { color: #ff00ff; }
-  80% { color: #00ffff; }
-  100% { color: #ff0000; }
-}
 header {
   width:100%;
   text-align:center;
@@ -34,41 +26,7 @@ header {
   font-size:2.5em;
   font-weight:bold;
   color:black;
-  letter-spacing:3px;
-  animation: ledColor 5s infinite;
-  position:relative;
 }
-.welcome {
-  position:fixed;
-  top:0; left:0; right:0; bottom:0;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background:rgba(255,255,255,0.95);
-  color:black;
-  font-size:1.5em;
-  text-align:center;
-  z-index:9999;
-  animation:fadeOut 5s forwards;
-  animation-delay:3s;
-}
-@keyframes fadeOut { to {opacity:0; visibility:hidden;} }
-.jokes-bar {
-  position:absolute;
-  top:80px;
-  width:100%;
-  overflow:hidden;
-  background:rgba(255,255,255,0.6);
-  white-space:nowrap;
-  padding:10px;
-  font-size:1.1em;
-  color:black;
-}
-.jokes-bar span { display:inline-block; white-space:nowrap; }
-@keyframes marquee { from { transform:translateX(100%); } to { transform:translateX(-100%); } }
-@keyframes marqueeRTL { from { transform:translateX(-100%); } to { transform:translateX(100%); } }
-
-/* کارت و راهنما */
 .card-wrapper {
   display: flex;
   flex-direction: column;
@@ -97,7 +55,6 @@ header {
   color:black;
 }
 .card.flipped { transform:rotateY(180deg); }
-/* متن پشت کارت */
 .card .front, .card .back {
   position:absolute;
   backface-visibility:hidden;
@@ -112,42 +69,23 @@ header {
   font-size:2em; /* شروع فونت بزرگ */
 }
 .card .back { transform:rotateY(180deg); color:black; flex-direction:column; }
-/* رنگ و فونت متفاوت برای هر زبان پشت کارت */
-.card .back span.fa { color:#4caf50; font-weight:bold; } /* سبز فارسی */
-.card .back span.en { color:#007bff; font-style:italic; } /* آبی انگلیسی */
-.card .back span.de { color:#e91e63; font-weight:bold; } /* صورتی آلمانی */
+.card .back span.fa { color:#4caf50; font-weight:bold; }
+.card .back span.en { color:#007bff; font-style:italic; }
+.card .back span.de { color:#e91e63; font-weight:bold; }
 .card .back span { display:block; margin:5px 0; word-break:break-word; }
-
-#guide { font-size: 1em; margin-bottom: 10px; text-align:center; color:black; }
-#motivational { margin-top:10px; font-size:1.2em; text-align:center; opacity:0; transition:opacity 0.5s; }
-
-/* کنترل‌ها و سایر عناصر */
-.controls { display:flex; gap:10px; align-items:center; margin-top:20px; flex-wrap:wrap; justify-content:center; }
-button, select, input { padding:8px 15px; border-radius:6px; border:none; cursor:pointer; font-size:1em; }
-button { background-color:#ff9800; color:white; }
-#hardBtn { background-color:#e91e63; }
+#guide, #languageGuide, #motivational, .stats { text-align:center; margin:5px 0; }
+.controls, .login-container, .add-sentence { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:15px; }
+button, select, input { padding:6px 12px; border-radius:5px; border:none; cursor:pointer; }
+button { background:#ff9800; color:white; }
+#hardBtn { background:#e91e63; }
 select { background:white; color:black; border:1px solid black; }
-.stats { margin-top:15px; font-size:1em; background:rgba(0,0,0,0.1); padding:8px 12px; border-radius:10px; color:black; }
-.add-sentence { margin-top:20px; display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }
-.add-sentence input, .add-sentence button { font-size:1em; }
-.add-sentence input { padding:6px; border-radius:5px; border:1px solid #ccc; width:200px; color:black; }
+.add-sentence input, .login-container input { border:1px solid #ccc; }
 .add-sentence button { background:#4caf50; color:white; }
-.login-container { margin-top:20px; display:flex; gap:10px; flex-wrap:wrap; justify-content:center; }
-.login-container input, .login-container button { font-size:1em; padding:6px; border-radius:5px; border:1px solid #ccc; }
-.login-container input { color:black; }
 .login-container button { background:#2196f3; color:white; }
-#languageGuide { color:black; text-align:center; margin-bottom:5px; }
 </style>
 </head>
 <body>
 <header>MORTI //// AMG</header>
-
-<div class="welcome" id="welcome">
-سلام دوست گرامی به سایت من خوش آمدی  
-امیدوارم از یادگیری زبان لذت ببری
-</div>
-
-<div class="jokes-bar"><span id="jokes"></span></div>
 
 <div class="card-wrapper">
   <div id="guide"></div>
@@ -187,16 +125,16 @@ select { background:white; color:black; border:1px solid black; }
 </div>
 
 <script>
-// داده‌ها
+// داده‌ها نمونه
 const sentences=[
-{ text:{ en:"Do I need to go through security again for my connecting flight?", de:"Muss ich für meinen Anschlussflug nochmal durch die Sicherheitskontrolle?", fa:"برای پرواز بعدی باید دوباره از کنترل امنیت عبور کنم؟" }, difficulty:"easy" },
-{ text:{ en:"Can you help me with my luggage?", de:"Können Sie mir mit meinem Gepäck helfen?", fa:"می‌توانید با چمدانم کمک کنید؟" }, difficulty:"easy" },
-{ text:{ en:"Which gate is for flight number 123?", de:"Welches Gate ist für Flugnummer 123?", fa:"گیت پرواز شماره ۱۲۳ کدام است؟" }, difficulty:"easy" },
-{ text:{ en:"What time does the flight to Berlin leave?", de:"Wann geht der Flug nach Berlin?", fa:"پرواز به برلین چه ساعتی حرکت می‌کند؟" }, difficulty:"easy" },
-{ text:{ en:"Hello!", de:"Hallo!", fa:"سلام!" }, difficulty:"easy" }
+{ text:{ en:"Do I need to go through security again for my connecting flight?", de:"Muss ich für meinen Anschlussflug nochmal durch die Sicherheitskontrolle?", fa:"برای پرواز بعدی باید دوباره از کنترل امنیت عبور کنم؟" }},
+{ text:{ en:"Can you help me with my luggage?", de:"Können Sie mir mit meinem Gepäck helfen?", fa:"می‌توانید با چمدانم کمک کنید؟" }},
+{ text:{ en:"Which gate is for flight number 123?", de:"Welches Gate ist für Flugnummer 123?", fa:"گیت پرواز شماره ۱۲۳ کدام است؟" }},
+{ text:{ en:"What time does the flight to Berlin leave?", de:"Wann geht der Flug nach Berlin?", fa:"پرواز به برلین چه ساعتی حرکت می‌کند؟" }},
+{ text:{ en:"Hello!", de:"Hallo!", fa:"سلام!" }},
+{ text:{ en:"How are you?", de:"Wie geht's?", fa:"چطوری؟" }}
 ];
 
-// متغیرها
 let current=0;
 let lang='fa';
 let hardCards=[];
@@ -213,7 +151,7 @@ const nextBtn=document.getElementById('nextBtn');
 const languageGuide=document.getElementById('languageGuide');
 const motivationalDiv=document.getElementById('motivational');
 
-// تابع تنظیم خودکار فونت بر اساس ارتفاع کارت
+// تابع کوچک کردن خودکار فونت
 function adjustFontSize(element, maxFont=24, minFont=10){
     element.style.fontSize = maxFont + "px";
     let height = element.scrollHeight;
@@ -226,46 +164,53 @@ function adjustFontSize(element, maxFont=24, minFont=10){
     }
 }
 
-// کارت‌ها
+// بروزرسانی کارت
 function updateCard(){
   front.textContent = allSentences[current].text[lang];
+  adjustFontSize(front, 24, 10);
 
   const otherLangs = ['en','de','fa'].filter(l => l!==lang)
     .map(l => `<span class="${l}">${allSentences[current].text[l]}</span>`)
     .join('');
   back.innerHTML = otherLangs;
-
   Array.from(back.children).forEach(span => adjustFontSize(span, 24, 10));
-
-  updateStats();
-  updateGuide();
-  updateLanguageGuide();
 }
 
+// توابع اصلی
 function flipCard(){ card.classList.toggle('flipped'); }
 function nextCard(){ card.classList.remove('flipped'); current=(current+1)%allSentences.length; updateCard(); }
 function changeLanguage(){ lang=document.getElementById('language').value; updateCard(); }
-function markHard(){ if(!hardCards.includes(current)) hardCards.push(current); updateStats(); }
-function updateStats(){ let progress=Math.round((knownCards.length/allSentences.length)*100); stats.textContent=`Progress: ${progress}% | Hard: ${hardCards.length}`; }
+function markHard(){ if(!hardCards.includes(current)) hardCards.push(current); stats.textContent=`Progress: ${Math.round((knownCards.length/allSentences.length)*100)}% | Hard: ${hardCards.length}`; }
 
-// راهنمای استفاده
-function updateGuide(){
-if(lang==='fa'){ guide.textContent="روی کارت کلیک کن تا ترجمه نمایش داده شود. سپس روی 'بعدی' بزن تا جمله بعدی بیاید."; nextBtn.textContent="بعدی"; }
-else if(lang==='en'){ guide.textContent="Click on the card to see the translation. Then press 'Next' for the next sentence."; nextBtn.textContent="Next"; }
-else if(lang==='de'){ guide.textContent="Klicke auf die Karte, um die Übersetzung zu sehen. Drücke dann 'Nächste' für den nächsten Satz."; nextBtn.textContent="Nächste"; }
+// ورود مدیر و اضافه کردن جملات
+const ADMIN_USERNAME='admin';
+const ADMIN_PASSWORD='1234';
+function login(){
+  const u=document.getElementById('username').value;
+  const p=document.getElementById('password').value;
+  if(u===ADMIN_USERNAME && p===ADMIN_PASSWORD){
+    alert("ورود موفق ✅");
+    document.getElementById('loginContainer').style.display='none';
+    document.getElementById('addSentenceContainer').style.display='flex';
+  } else { alert("نام کاربری یا رمز اشتباه ❌"); }
 }
-
-// راهنمای انتخاب زبان
-function updateLanguageGuide(){
-if(lang==='fa'){ languageGuide.textContent="زبان مورد نظر خود را انتخاب کنید:"; }
-else if(lang==='en'){ languageGuide.textContent="Select your preferred language:"; }
-else if(lang==='de'){ languageGuide.textContent="Wähle deine Sprache:"; }
+function addSentence(){
+  const en=document.getElementById('enInput').value.trim();
+  const de=document.getElementById('deInput').value.trim();
+  const fa=document.getElementById('faInput').value.trim();
+  if(!en||!de||!fa){ alert("لطفا هر سه زبان را پر کنید!"); return; }
+  const newSentence={text:{en,de,fa}, difficulty:'custom'};
+  customSentences.push(newSentence);
+  allSentences.push(newSentence);
+  alert("✅ جمله اضافه شد!");
+  document.getElementById('enInput').value='';
+  document.getElementById('deInput').value='';
+  document.getElementById('faInput').value='';
+  updateCard();
 }
 
 // اجرای اولیه
 updateCard();
-updateGuide();
-updateLanguageGuide();
 </script>
 </body>
 </html>
