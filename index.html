@@ -97,7 +97,7 @@ header {
   color:black;
 }
 .card.flipped { transform:rotateY(180deg); }
-/* تغییر اصلی: متن پشت کارت با فونت خودکار */
+/* تغییر اصلی: متن پشت کارت با فونت خودکار و رنگ متفاوت */
 .card .front, .card .back {
   position:absolute;
   backface-visibility:hidden;
@@ -112,9 +112,10 @@ header {
   font-size: clamp(0.8em, 2vw, 2em);
 }
 .card .back { transform:rotateY(180deg); color:black; flex-direction:column; }
-/* رنگ‌های جداگانه برای زبان‌ها */
-.card .back span.en { color:#007bff; } /* آبی برای انگلیسی */
-.card .back span.de { color:#e91e63; } /* صورتی برای آلمانی */
+/* رنگ و فونت متفاوت برای هر زبان پشت کارت */
+.card .back span.fa { color:#4caf50; font-weight:bold; } /* سبز فارسی */
+.card .back span.en { color:#007bff; font-style:italic; } /* آبی انگلیسی */
+.card .back span.de { color:#e91e63; font-weight:bold; } /* صورتی آلمانی */
 .card .back span { display:block; margin:5px 0; word-break:break-word; }
 
 #guide { font-size: 1em; margin-bottom: 10px; text-align:center; color:black; }
@@ -246,7 +247,7 @@ const motivationalDiv=document.getElementById('motivational');
 function updateCard(){
   front.textContent = allSentences[current].text[lang];
 
-  // پشت کارت: span با کلاس زبان‌ها
+  // پشت کارت: span با کلاس زبان‌ها (fa, en, de)
   const otherLangs = ['en','de','fa'].filter(l => l!==lang)
     .map(l => `<span class="${l}">${allSentences[current].text[l]}</span>`)
     .join('');
