@@ -66,7 +66,7 @@ select { background:white; color:black; border:1px solid black; }
 <div id="languageGuide"></div>
 <button onclick="prevCard()" id="prevBtn">قبلی</button>
 <button onclick="nextCard()" id="nextBtn">بعدی</button>
-<button id="hardBtn" onclick="markHard()">Hard</button>
+<button id="hardBtn" onclick="markHard()">سخت</button>
 <select id="language" onchange="changeLanguage()">
 <option value="en">English</option>
 <option value="de">German</option>
@@ -122,17 +122,24 @@ function adjustFontSize(element, maxFont=24, minFont=10){
     }
 }
 
-function updateHardButton(){
-    if(lang==='fa') hardBtn.textContent = 'سخت | Hard | Schwierig';
-    else if(lang==='en') hardBtn.textContent = 'Hard | سخت | Schwierig';
-    else if(lang==='de') hardBtn.textContent = 'Schwierig | Hard | سخت';
-}
-
 function updatePrevButton(){
     const prevBtn = document.getElementById('prevBtn');
-    if(lang==='fa') prevBtn.textContent = 'قبلی | Previous | Zurück';
-    else if(lang==='en') prevBtn.textContent = 'Previous | قبلی | Zurück';
-    else if(lang==='de') prevBtn.textContent = 'Zurück | Previous | قبلی';
+    if(lang==='fa') prevBtn.textContent = 'قبلی';
+    else if(lang==='en') prevBtn.textContent = 'Previous';
+    else if(lang==='de') prevBtn.textContent = 'Zurück';
+}
+
+function updateNextButton(){
+    const nextBtn = document.getElementById('nextBtn');
+    if(lang==='fa') nextBtn.textContent = 'بعدی';
+    else if(lang==='en') nextBtn.textContent = 'Next';
+    else if(lang==='de') nextBtn.textContent = 'Nächste';
+}
+
+function updateHardButton(){
+    if(lang==='fa') hardBtn.textContent = 'سخت';
+    else if(lang==='en') hardBtn.textContent = 'Hard';
+    else if(lang==='de') hardBtn.textContent = 'Schwierig';
 }
 
 function updateCard(){
@@ -141,7 +148,8 @@ function updateCard(){
   const otherLangs = ['en','de','fa'].filter(l => l!==lang).map(l => `<span class="${l}">${allSentences[current].text[l]}</span>`).join('');
   back.innerHTML = otherLangs;
   Array.from(back.children).forEach(span => adjustFontSize(span, 24, 10));
-  updateStats(); updateGuide(); updateLanguageGuide(); initJokes(); updateHardButton(); updatePrevButton();
+  updateStats(); updateGuide(); updateLanguageGuide(); initJokes();
+  updatePrevButton(); updateNextButton(); updateHardButton();
 }
 
 function flipCard(){ card.classList.toggle('flipped'); }
