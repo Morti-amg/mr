@@ -74,7 +74,7 @@ select { background:white; color:black; border:1px solid black; }
 </select>
 </div>
 
-<div class="stats" id="stats">Progress: 0% | Hard: 0</div>
+<div class="stats" id="stats">پیشرفت: 0٪ | سخت: 0</div>
 
 <div class="login-container" id="loginContainer">
 <input type="text" id="username" placeholder="Username">
@@ -123,14 +123,12 @@ function adjustFontSize(element, maxFont=24, minFont=10){
 }
 
 function updatePrevButton(){
-    const prevBtn = document.getElementById('prevBtn');
     if(lang==='fa') prevBtn.textContent = 'قبلی';
     else if(lang==='en') prevBtn.textContent = 'Previous';
     else if(lang==='de') prevBtn.textContent = 'Zurück';
 }
 
 function updateNextButton(){
-    const nextBtn = document.getElementById('nextBtn');
     if(lang==='fa') nextBtn.textContent = 'بعدی';
     else if(lang==='en') nextBtn.textContent = 'Next';
     else if(lang==='de') nextBtn.textContent = 'Nächste';
@@ -140,6 +138,14 @@ function updateHardButton(){
     if(lang==='fa') hardBtn.textContent = 'سخت';
     else if(lang==='en') hardBtn.textContent = 'Hard';
     else if(lang==='de') hardBtn.textContent = 'Schwierig';
+}
+
+function updateStats(){
+    let progressPercent = Math.round((knownCards.length / allSentences.length) * 100);
+    let hardCount = hardCards.length;
+    if(lang==='fa') stats.textContent = `پیشرفت: ${progressPercent}% | سخت: ${hardCount}`;
+    else if(lang==='en') stats.textContent = `Progress: ${progressPercent}% | Hard: ${hardCount}`;
+    else if(lang==='de') stats.textContent = `Fortschritt: ${progressPercent}% | Schwierig: ${hardCount}`;
 }
 
 function updateCard(){
@@ -159,8 +165,6 @@ function prevCard(){ card.classList.remove('flipped'); current=(current-1+allSen
 function changeLanguage(){ lang=document.getElementById('language').value; updateCard(); }
 
 function markHard(){ if(!hardCards.includes(current)) hardCards.push(current); updateStats(); }
-
-function updateStats(){ let progress=Math.round((knownCards.length/allSentences.length)*100); stats.textContent=`Progress: ${progress}% | Hard: ${hardCards.length}`; }
 
 function updateGuide(){
 if(lang==='fa') guide.textContent="روی کارت کلیک کن تا ترجمه نمایش داده شود. سپس روی 'بعدی' یا 'قبلی' بزن تا جمله بعدی یا قبلی بیاید.";
