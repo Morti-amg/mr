@@ -95,6 +95,7 @@ header {
   padding:20px;
   text-align:center;
   color:black;
+  overflow:hidden;
 }
 .card.flipped { transform:rotateY(180deg); }
 .card .front, .card .back { position:absolute; backface-visibility:hidden; width:100%; text-align:center; }
@@ -132,7 +133,6 @@ select { background:white; color:black; border:1px solid black; }
 .login-container button { background:#2196f3; color:white; }
 #languageGuide { color:black; text-align:center; margin-bottom:5px; }
 
-/* نسخه دسکتاپ ثابت: قابلیت موبایل غیرفعال شده */
 </style>
 </head>
 <body>
@@ -241,15 +241,34 @@ const nextBtn=document.getElementById('nextBtn');
 const languageGuide=document.getElementById('languageGuide');
 const motivationalDiv=document.getElementById('motivational');
 
-// === کارت‌ها ===
-function updateCard(){
-front.textContent=allSentences[current].text[lang];
-const otherLangs=['en','de','fa'].filter(l=>l!==lang).map(l=>allSentences[current].text[l]).join(' | ');
-back.textContent=otherLangs;
-updateStats();
-updateGuide();
-updateLanguageGuide();
+// === کارت‌ها با فونت داینامیک ===
+function updateCard() {
+    front.textContent = allSentences[current].text[lang];
+    const otherLangs = ['en','de','fa'].filter(l => l !== lang)
+                        .map(l => allSentences[current].text[l])
+                        .join(' | ');
+    back.textContent = otherLangs;
+
+    adjustFontSize(front, card);
+    adjustFontSize(back, card);
+
+    updateStats();
+    updateGuide();
+    updateLanguageGuide();
 }
+
+function adjustFontSize(element, container) {
+    const maxFontSize = 2; // em
+    const minFontSize = 0.8; // em
+    let fontSize = maxFontSize;
+    element.style.fontSize = fontSize + 'em';
+
+    while (element.scrollHeight > container.clientHeight - 20 && fontSize > minFontSize) {
+        fontSize -= 0.1;
+        element.style.fontSize = fontSize + 'em';
+    }
+}
+
 function flipCard(){ card.classList.toggle('flipped'); }
 function nextCard(){ card.classList.remove('flipped'); current=(current+1)%allSentences.length; updateCard(); }
 function changeLanguage(){ 
