@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>کارت آموزشی MORTI //// AMG</title>
+<title>MORTI //// AMG - Language Learning</title>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 body {
@@ -27,11 +27,28 @@ header {
   font-weight:bold;
   color:black;
 }
+.jokes-bar {
+  width:100%;
+  overflow:hidden;
+  white-space:nowrap;
+  padding:10px;
+  font-size:1.1em;
+  color:black;
+  background:rgba(255,255,255,0.6);
+  position:relative;
+}
+.jokes-bar span {
+  display:inline-block;
+  white-space:nowrap;
+  animation: marquee 40s linear infinite;
+}
+@keyframes marquee { from { transform:translateX(100%); } to { transform:translateX(-100%); } }
+
 .card-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 50px;
+  margin-top: 20px;
   width: 100%;
 }
 .card-container {
@@ -66,14 +83,16 @@ header {
   padding:20px;
   overflow:hidden;
   word-break: break-word;
-  font-size:2em; /* شروع فونت بزرگ */
+  font-size:2em; 
 }
 .card .back { transform:rotateY(180deg); color:black; flex-direction:column; }
 .card .back span.fa { color:#4caf50; font-weight:bold; }
 .card .back span.en { color:#007bff; font-style:italic; }
 .card .back span.de { color:#e91e63; font-weight:bold; }
 .card .back span { display:block; margin:5px 0; word-break:break-word; }
+
 #guide, #languageGuide, #motivational, .stats { text-align:center; margin:5px 0; }
+#motivational { font-size:1.2em; opacity:0; transition:opacity 0.5s; }
 .controls, .login-container, .add-sentence { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:15px; }
 button, select, input { padding:6px 12px; border-radius:5px; border:none; cursor:pointer; }
 button { background:#ff9800; color:white; }
@@ -86,6 +105,8 @@ select { background:white; color:black; border:1px solid black; }
 </head>
 <body>
 <header>MORTI //// AMG</header>
+
+<div class="jokes-bar"><span id="jokes"></span></div>
 
 <div class="card-wrapper">
   <div id="guide"></div>
@@ -135,6 +156,18 @@ const sentences=[
 { text:{ en:"How are you?", de:"Wie geht's?", fa:"چطوری؟" }}
 ];
 
+const jokesData = {
+  en:["Why don’t programmers like nature? Too many bugs! 😂","I told my computer I needed a break, it froze! 🥶"],
+  de:["Warum mögen Programmierer die Natur nicht? Zu viele Bugs! 🐞","Ich sagte meinem Computer, ich brauche eine Pause – er stürzte ab! 💻"],
+  fa:["چرا برنامه‌نویس‌ها طبیعت رو دوست ندارن؟ چون پر از باگه! 🐞","به کامپیوترم گفتم استراحت می‌خوام، یهو هنگ کرد! 💻"]
+};
+
+const motivationalSentences = {
+en:["Keep going! You can do it!","Every step counts!","Learning is fun!"],
+de:["Mach weiter! Du schaffst das!","Jeder Schritt zählt!","Lernen macht Spaß!"],
+fa:["ادامه بده! تو می‌توانی!","هر قدم مهم است!","یادگیری سرگرم‌کننده است!"]
+};
+
 let current=0;
 let lang='fa';
 let hardCards=[];
@@ -150,8 +183,9 @@ const guide=document.getElementById('guide');
 const nextBtn=document.getElementById('nextBtn');
 const languageGuide=document.getElementById('languageGuide');
 const motivationalDiv=document.getElementById('motivational');
+const jokesSpan=document.getElementById('jokes');
 
-// تابع کوچک کردن خودکار فونت
+// تابع کوچک کردن فونت
 function adjustFontSize(element, maxFont=24, minFont=10){
     element.style.fontSize = maxFont + "px";
     let height = element.scrollHeight;
@@ -174,13 +208,44 @@ function updateCard(){
     .join('');
   back.innerHTML = otherLangs;
   Array.from(back.children).forEach(span => adjustFontSize(span, 24, 10));
+  updateStats();
+  updateGuide();
+  updateLanguageGuide();
+  initJokes();
 }
 
 // توابع اصلی
 function flipCard(){ card.classList.toggle('flipped'); }
 function nextCard(){ card.classList.remove('flipped'); current=(current+1)%allSentences.length; updateCard(); }
 function changeLanguage(){ lang=document.getElementById('language').value; updateCard(); }
-function markHard(){ if(!hardCards.includes(current)) hardCards.push(current); stats.textContent=`Progress: ${Math.round((knownCards.length/allSentences.length)*100)}% | Hard: ${hardCards.length}`; }
+function markHard(){ if(!hardCards.includes(current)) hardCards.push(current); updateStats(); }
+function updateStats(){ let progress=Math.round((knownCards.length/allSentences.length)*100); stats.textContent=`Progress: ${progress}% | Hard: ${hardCards.length}`; }
+function updateGuide(){
+if(lang==='fa'){ guide.textContent="روی کارت کلیک کن تا ترجمه نمایش داده شود. سپس روی 'بعدی' بزن تا جمله بعدی بیاید."; nextBtn.textContent="بعدی"; }
+else if(lang==='en'){ guide.textContent="Click on the card to see the translation. Then press 'Next' for the next sentence."; nextBtn.textContent="Next"; }
+else if(lang==='de'){ guide.textContent="Klicke auf die Karte, um die Übersetzung zu sehen. Drücke dann 'Nächste' für den nächsten Satz."; nextBtn.textContent="Nächste"; }
+}
+function updateLanguageGuide(){
+if(lang==='fa'){ languageGuide.textContent="زبان مورد نظر خود را انتخاب کنید:"; }
+else if(lang==='en'){ languageGuide.textContent="Select your preferred language:"; }
+else if(lang==='de'){ languageGuide.textContent="Wähle deine Sprache:"; }
+}
+
+// جوک‌ها
+function initJokes(){
+  jokesSpan.textContent=jokesData[lang].join(" ⚡ ");
+  if(lang==='fa'){ jokesSpan.style.animation='marquee 40s linear infinite'; } else { jokesSpan.style.animation='marquee 40s linear infinite'; }
+}
+
+// جملات انگیزشی
+function showMotivational(){
+  const sentence = motivationalSentences[lang][Math.floor(Math.random()*motivationalSentences[lang].length)];
+  motivationalDiv.textContent = sentence;
+  motivationalDiv.style.opacity = '1';
+  setTimeout(()=>{ motivationalDiv.style.opacity='0'; }, 4000);
+}
+setInterval(showMotivational, 60000);
+setTimeout(showMotivational, 1000);
 
 // ورود مدیر و اضافه کردن جملات
 const ADMIN_USERNAME='admin';
@@ -192,7 +257,7 @@ function login(){
     alert("ورود موفق ✅");
     document.getElementById('loginContainer').style.display='none';
     document.getElementById('addSentenceContainer').style.display='flex';
-  } else { alert("نام کاربری یا رمز اشتباه ❌"); }
+  }else{ alert("نام کاربری یا رمز اشتباه ❌"); }
 }
 function addSentence(){
   const en=document.getElementById('enInput').value.trim();
