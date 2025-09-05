@@ -19,6 +19,8 @@ body {
   overflow-x:hidden;
   background-color:white;
 }
+
+/* انیمیشن LED هدر */
 @keyframes ledColor {
   0% { color: #ff0000; }
   20% { color: #00ff00; }
@@ -36,6 +38,24 @@ header {
   animation: ledColor 5s infinite;
 }
 
+/* خوش‌آمدگویی */
+.welcome {
+  position:fixed;
+  top:0; left:0; right:0; bottom:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:rgba(255,255,255,0.95);
+  color:black;
+  font-size:1.5em;
+  text-align:center;
+  z-index:9999;
+  animation:fadeOut 5s forwards;
+  animation-delay:3s;
+}
+@keyframes fadeOut { to {opacity:0; visibility:hidden;} }
+
+/* جوک‌ها */
 .jokes-bar {
   width:100%;
   overflow:hidden;
@@ -53,6 +73,7 @@ header {
 }
 @keyframes marquee { from { transform:translateX(100%); } to { transform:translateX(-100%); } }
 
+/* کارت‌ها */
 .card-wrapper {
   display: flex;
   flex-direction: column;
@@ -98,6 +119,7 @@ header {
 .card .back span.de { color:#e91e63; font-weight:bold; }
 .card .back span { display:block; margin:5px 0; word-break:break-word; }
 
+/* متن‌ها و کنترل‌ها */
 #guide, #languageGuide, #motivational, .stats { text-align:center; margin:5px 0; }
 #motivational { font-size:1.2em; opacity:0; transition:opacity 0.5s; }
 .controls, .login-container, .add-sentence { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin-top:15px; }
@@ -112,6 +134,11 @@ select { background:white; color:black; border:1px solid black; }
 </head>
 <body>
 <header>MORTI //// AMG</header>
+
+<div class="welcome" id="welcome">
+سلام دوست گرامی به سایت من خوش آمدی<br>
+امیدوارم از یادگیری زبان لذت ببری
+</div>
 
 <div class="jokes-bar"><span id="jokes"></span></div>
 
@@ -270,6 +297,7 @@ function addSentence(){
   updateCard();
 }
 
+// اجرای اولیه
 updateCard();
 </script>
 </body>
