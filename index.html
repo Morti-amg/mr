@@ -29,14 +29,14 @@ header {
   letter-spacing:3px;
 }
 .card-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 50px;
-  width: 100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  margin-top:50px;
+  width:100%;
 }
 .card-container {
-  perspective: 1000px;
+  perspective:1000px;
 }
 .card {
   width:400px;
@@ -62,9 +62,9 @@ header {
   width:100%;
   text-align:center;
   max-height:100%;
-  overflow-y:auto;
+  overflow-y:auto; /* اضافه شد */
   padding:5px;
-  word-wrap: break-word;
+  word-wrap:break-word;
 }
 .card .back { transform:rotateY(180deg); color:black; }
 </style>
@@ -81,9 +81,9 @@ header {
 </div>
 <script>
 const sentences=[
-{ text:{ en:"Do I need to go through security again for my connecting flight?", de:"Muss ich für meinen Anschlussflug nochmal durch die Sicherheitskontrolle?", fa:"برای پرواز بعدی باید دوباره از کنترل امنیت عبور کنم؟" }},
-{ text:{ en:"Can you help me with my luggage?", de:"Können Sie mir mit meinem Gepäck helfen?", fa:"می‌توانید با چمدانم کمک کنید؟" }},
-{ text:{ en:"Hello!", de:"Hallo!", fa:"سلام!" }}
+  { text:{ en:"Do I need to go through security again for my connecting flight?", de:"Muss ich für meinen Anschlussflug nochmal durch die Sicherheitskontrolle?", fa:"برای پرواز بعدی باید دوباره از کنترل امنیت عبور کنم؟" }},
+  { text:{ en:"Can you help me with my luggage?", de:"Können Sie mir mit meinem Gepäck helfen?", fa:"می‌توانید با چمدانم کمک کنید؟" }},
+  { text:{ en:"Hello!", de:"Hallo!", fa:"سلام!" }}
 ];
 
 let current=0;
@@ -91,38 +91,37 @@ const card=document.getElementById('flashCard');
 const front=document.getElementById('front');
 const back=document.getElementById('back');
 
-function updateCard() {
-  front.textContent = sentences[current].text['fa'];
-  back.textContent = [sentences[current].text['en'], sentences[current].text['de']].join(' | ');
-  adjustFontSize(front, card);
-  adjustFontSize(back, card);
+function adjustFontSize(element, container) {
+    const maxFontSize = 2; // em
+    const minFontSize = 1; // em
+    let fontSize = maxFontSize;
+    element.style.fontSize = fontSize + 'em';
+
+    while(element.scrollHeight > container.clientHeight - 10 && fontSize > minFontSize) {
+        fontSize -= 0.05;
+        element.style.fontSize = fontSize + 'em';
+    }
+
+    element.style.overflowY = element.scrollHeight > container.clientHeight ? 'auto' : 'hidden';
 }
 
-function adjustFontSize(element, container) {
-  const maxFontSize = 2; // em
-  const minFontSize = 1; // em
-  let fontSize = maxFontSize;
-  element.style.fontSize = fontSize + 'em';
+function updateCard() {
+    // جلوی کارت: فارسی
+    front.textContent = sentences[current].text['fa'];
 
-  while(element.scrollHeight > container.clientHeight - 10 && fontSize > minFontSize) {
-    fontSize -= 0.05;
-    element.style.fontSize = fontSize + 'em';
-  }
+    // پشت کارت: انگلیسی و آلمانی
+    back.textContent = ['en','de'].map(l => sentences[current].text[l]).join(' | ');
 
-  // حداکثر 2 خط با overflow کوتاه
-  element.style.overflowY = element.scrollHeight > container.clientHeight ? 'auto' : 'hidden';
+    // تنظیم فونت خودکار
+    adjustFontSize(front, card);
+    adjustFontSize(back, card);
 }
 
 function flipCard() { card.classList.toggle('flipped'); }
-
-function nextCard() {
-  current = (current + 1) % sentences.length;
-  card.classList.remove('flipped');
-  updateCard();
-}
+function nextCard() { current = (current + 1) % sentences.length; card.classList.remove('flipped'); updateCard(); }
 
 updateCard();
-setInterval(nextCard, 5000); // تست خودکار تغییر کارت هر 5 ثانیه
+setInterval(nextCard, 5000);
 </script>
 </body>
 </html>
