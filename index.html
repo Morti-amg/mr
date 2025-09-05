@@ -67,7 +67,6 @@ header {
 .jokes-bar span { display:inline-block; white-space:nowrap; }
 @keyframes marquee { from { transform:translateX(100%); } to { transform:translateX(-100%); } }
 @keyframes marqueeRTL { from { transform:translateX(-100%); } to { transform:translateX(100%); } }
-
 .card-wrapper {
   display: flex;
   flex-direction: column;
@@ -117,7 +116,6 @@ header {
   color:black;
 }
 .card .back .lang-text { font-weight:bold; }
-
 #guide { font-size: 1em; margin-bottom: 10px; text-align:center; color:black; }
 #motivational { margin-top:10px; font-size:1.2em; text-align:center; opacity:0; transition:opacity 0.5s; }
 .controls { display:flex; gap:10px; align-items:center; margin-top:20px; flex-wrap:wrap; justify-content:center; }
@@ -168,6 +166,12 @@ const jokes={
   fa:["چرا برنامه‌نویس‌ها طبیعت رو دوست ندارن؟ چون پر از باگه! 🐞"]
 };
 
+const motivationalSentences={
+  en:["Keep going! You can do it!"],
+  de:["Mach weiter! Du schaffst das!"],
+  fa:["ادامه بده! تو می‌توانی!"]
+};
+
 let current=0;
 let lang='fa';
 let hardCards=[];
@@ -181,6 +185,7 @@ const jokesSpan=document.getElementById('jokes');
 const nextBtn=document.getElementById('nextBtn');
 const prevBtn=document.getElementById('prevBtn');
 const hardBtn=document.getElementById('hardBtn');
+const motivationalDiv=document.getElementById('motivational');
 
 function fitText(el){
   let size=28;
@@ -206,6 +211,7 @@ function updateCard(){
   updateStats();
   updateButtons();
 }
+
 function flipCard(){ card.classList.toggle('flipped'); }
 function nextCard(){ card.classList.remove('flipped'); current=(current+1)%allSentences.length; updateCard(); }
 function prevCard(){ card.classList.remove('flipped'); current=(current-1+allSentences.length)%allSentences.length; updateCard(); }
@@ -229,6 +235,15 @@ function initJokes(){
   if(lang==='fa'){ jokesSpan.style.animation='marqueeRTL 20s linear infinite'; }
   else{ jokesSpan.style.animation='marquee 20s linear infinite'; }
 }
+
+function showMotivational(){
+  const sentence = motivationalSentences[lang][Math.floor(Math.random()*motivationalSentences[lang].length)];
+  motivationalDiv.textContent=sentence;
+  motivationalDiv.style.opacity='1';
+  setTimeout(()=>{motivationalDiv.style.opacity='0';},4000);
+}
+setInterval(showMotivational,60000);
+setTimeout(showMotivational,1000);
 
 updateCard();
 initJokes();
