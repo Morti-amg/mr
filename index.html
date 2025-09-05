@@ -219,6 +219,7 @@ const nextBtn=document.getElementById('nextBtn');
 const languageGuide=document.getElementById('languageGuide');
 const motivationalDiv=document.getElementById('motivational');
 const jokesSpan=document.getElementById('jokes');
+const hardBtn=document.getElementById('hardBtn');
 
 function adjustFontSize(element, maxFont=24, minFont=10){
     element.style.fontSize = maxFont + "px";
@@ -232,6 +233,12 @@ function adjustFontSize(element, maxFont=24, minFont=10){
     }
 }
 
+function updateHardButton(){
+    if(lang==='fa') hardBtn.textContent = 'سخت | Hard | Schwierig';
+    else if(lang==='en') hardBtn.textContent = 'Hard | سخت | Schwierig';
+    else if(lang==='de') hardBtn.textContent = 'Schwierig | Hard | سخت';
+}
+
 function updateCard(){
   front.textContent = allSentences[current].text[lang];
   adjustFontSize(front, 24, 10);
@@ -243,6 +250,7 @@ function updateCard(){
   updateGuide();
   updateLanguageGuide();
   initJokes();
+  updateHardButton();
 }
 
 function flipCard(){ card.classList.toggle('flipped'); }
