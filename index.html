@@ -97,7 +97,7 @@ header {
   color:black;
 }
 .card.flipped { transform:rotateY(180deg); }
-/* تغییر اصلی برای فونت خودکار متن داخل کارت */
+/* تغییر اصلی: متن پشت کارت با فونت خودکار */
 .card .front, .card .back {
   position:absolute;
   backface-visibility:hidden;
@@ -107,26 +107,18 @@ header {
   justify-content:center;
   align-items:center;
   padding:20px;
-  overflow:hidden; /* جلوگیری از بیرون زدن متن */
+  overflow:hidden;
   word-break: break-word;
-  font-size: clamp(0.8em, 2vw, 2em); /* فونت خودکار بین حداقل و حداکثر */
+  font-size: clamp(0.8em, 2vw, 2em);
 }
-.card .back { transform:rotateY(180deg); color:black; }
+.card .back { transform:rotateY(180deg); color:black; flex-direction:column; }
+/* رنگ‌های جداگانه برای زبان‌ها */
+.card .back span.en { color:#007bff; } /* آبی برای انگلیسی */
+.card .back span.de { color:#e91e63; } /* صورتی برای آلمانی */
+.card .back span { display:block; margin:5px 0; word-break:break-word; }
 
-#guide {
-  font-size: 1em;
-  margin-bottom: 10px;
-  text-align:center;
-  color:black;
-}
-
-#motivational {
-  margin-top:10px;
-  font-size:1.2em;
-  text-align:center;
-  opacity:0;
-  transition:opacity 0.5s;
-}
+#guide { font-size: 1em; margin-bottom: 10px; text-align:center; color:black; }
+#motivational { margin-top:10px; font-size:1.2em; text-align:center; opacity:0; transition:opacity 0.5s; }
 
 /* کنترل‌ها و سایر عناصر */
 .controls { display:flex; gap:10px; align-items:center; margin-top:20px; flex-wrap:wrap; justify-content:center; }
@@ -144,8 +136,6 @@ select { background:white; color:black; border:1px solid black; }
 .login-container input { color:black; }
 .login-container button { background:#2196f3; color:white; }
 #languageGuide { color:black; text-align:center; margin-bottom:5px; }
-
-/* نسخه دسکتاپ ثابت: قابلیت موبایل غیرفعال شده */
 </style>
 </head>
 <body>
@@ -156,9 +146,7 @@ select { background:white; color:black; border:1px solid black; }
 امیدوارم از یادگیری زبان لذت ببری
 </div>
 
-<div class="jokes-bar">
-<span id="jokes"></span>
-</div>
+<div class="jokes-bar"><span id="jokes"></span></div>
 
 <div class="card-wrapper">
   <div id="guide"></div>
@@ -256,12 +244,17 @@ const motivationalDiv=document.getElementById('motivational');
 
 // === کارت‌ها ===
 function updateCard(){
-front.textContent=allSentences[current].text[lang];
-const otherLangs=['en','de','fa'].filter(l=>l!==lang).map(l=>allSentences[current].text[l]).join(' | ');
-back.textContent=otherLangs;
-updateStats();
-updateGuide();
-updateLanguageGuide();
+  front.textContent = allSentences[current].text[lang];
+
+  // پشت کارت: span با کلاس زبان‌ها
+  const otherLangs = ['en','de','fa'].filter(l => l!==lang)
+    .map(l => `<span class="${l}">${allSentences[current].text[l]}</span>`)
+    .join('');
+  back.innerHTML = otherLangs;
+
+  updateStats();
+  updateGuide();
+  updateLanguageGuide();
 }
 function flipCard(){ card.classList.toggle('flipped'); }
 function nextCard(){ card.classList.remove('flipped'); current=(current+1)%allSentences.length; updateCard(); }
