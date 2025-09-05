@@ -19,14 +19,23 @@ body {
   overflow-x:hidden;
   background-color:white;
 }
+@keyframes ledColor {
+  0% { color: #ff0000; }
+  20% { color: #00ff00; }
+  40% { color: #0000ff; }
+  60% { color: #ff00ff; }
+  80% { color: #00ffff; }
+  100% { color: #ff0000; }
+}
 header {
   width:100%;
   text-align:center;
   padding:20px;
   font-size:2.5em;
   font-weight:bold;
-  color:black;
+  animation: ledColor 5s infinite;
 }
+
 .jokes-bar {
   width:100%;
   overflow:hidden;
@@ -51,9 +60,7 @@ header {
   margin-top: 20px;
   width: 100%;
 }
-.card-container {
-  perspective: 1000px;
-}
+.card-container { perspective: 1000px; }
 .card {
   width:400px;
   height:220px;
@@ -83,7 +90,7 @@ header {
   padding:20px;
   overflow:hidden;
   word-break: break-word;
-  font-size:2em; 
+  font-size:2em;
 }
 .card .back { transform:rotateY(180deg); color:black; flex-direction:column; }
 .card .back span.fa { color:#4caf50; font-weight:bold; }
@@ -185,7 +192,6 @@ const languageGuide=document.getElementById('languageGuide');
 const motivationalDiv=document.getElementById('motivational');
 const jokesSpan=document.getElementById('jokes');
 
-// تابع کوچک کردن فونت
 function adjustFontSize(element, maxFont=24, minFont=10){
     element.style.fontSize = maxFont + "px";
     let height = element.scrollHeight;
@@ -198,14 +204,11 @@ function adjustFontSize(element, maxFont=24, minFont=10){
     }
 }
 
-// بروزرسانی کارت
 function updateCard(){
   front.textContent = allSentences[current].text[lang];
   adjustFontSize(front, 24, 10);
-
   const otherLangs = ['en','de','fa'].filter(l => l!==lang)
-    .map(l => `<span class="${l}">${allSentences[current].text[l]}</span>`)
-    .join('');
+    .map(l => `<span class="${l}">${allSentences[current].text[l]}</span>`).join('');
   back.innerHTML = otherLangs;
   Array.from(back.children).forEach(span => adjustFontSize(span, 24, 10));
   updateStats();
@@ -214,7 +217,6 @@ function updateCard(){
   initJokes();
 }
 
-// توابع اصلی
 function flipCard(){ card.classList.toggle('flipped'); }
 function nextCard(){ card.classList.remove('flipped'); current=(current+1)%allSentences.length; updateCard(); }
 function changeLanguage(){ lang=document.getElementById('language').value; updateCard(); }
@@ -231,13 +233,8 @@ else if(lang==='en'){ languageGuide.textContent="Select your preferred language:
 else if(lang==='de'){ languageGuide.textContent="Wähle deine Sprache:"; }
 }
 
-// جوک‌ها
-function initJokes(){
-  jokesSpan.textContent=jokesData[lang].join(" ⚡ ");
-  if(lang==='fa'){ jokesSpan.style.animation='marquee 40s linear infinite'; } else { jokesSpan.style.animation='marquee 40s linear infinite'; }
-}
+function initJokes(){ jokesSpan.textContent=jokesData[lang].join(" ⚡ "); }
 
-// جملات انگیزشی
 function showMotivational(){
   const sentence = motivationalSentences[lang][Math.floor(Math.random()*motivationalSentences[lang].length)];
   motivationalDiv.textContent = sentence;
@@ -247,7 +244,6 @@ function showMotivational(){
 setInterval(showMotivational, 60000);
 setTimeout(showMotivational, 1000);
 
-// ورود مدیر و اضافه کردن جملات
 const ADMIN_USERNAME='admin';
 const ADMIN_PASSWORD='1234';
 function login(){
@@ -274,7 +270,6 @@ function addSentence(){
   updateCard();
 }
 
-// اجرای اولیه
 updateCard();
 </script>
 </body>
