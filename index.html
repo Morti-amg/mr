@@ -98,7 +98,16 @@ header {
   overflow:hidden;
 }
 .card.flipped { transform:rotateY(180deg); }
-.card .front, .card .back { position:absolute; backface-visibility:hidden; width:100%; text-align:center; }
+.card .front, .card .back {
+  position:absolute;
+  backface-visibility:hidden;
+  width:100%;
+  text-align:center;
+  max-height:100%;
+  overflow-y:auto; /* اضافه شده برای متن طولانی */
+  padding:5px;
+  word-wrap: break-word;
+}
 .card .back { transform:rotateY(180deg); font-size:1.3em; color:black; }
 
 #guide {
@@ -259,13 +268,19 @@ function updateCard() {
 
 function adjustFontSize(element, container) {
     const maxFontSize = 2; // em
-    const minFontSize = 0.8; // em
+    const minFontSize = 1; // حداقل خوانا
     let fontSize = maxFontSize;
     element.style.fontSize = fontSize + 'em';
-
+    
     while (element.scrollHeight > container.clientHeight - 20 && fontSize > minFontSize) {
-        fontSize -= 0.1;
+        fontSize -= 0.05;
         element.style.fontSize = fontSize + 'em';
+    }
+
+    if (element.scrollHeight > container.clientHeight) {
+        element.style.overflowY = 'auto';
+    } else {
+        element.style.overflowY = 'hidden';
     }
 }
 
