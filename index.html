@@ -155,13 +155,14 @@ select { background:white; color:black; border:1px solid black; }
 
 <div class="controls">
 <div id="languageGuide"></div>
+<button onclick="prevCard()" id="prevBtn">قبلی</button>
+<button onclick="nextCard()" id="nextBtn">بعدی</button>
+<button id="hardBtn" onclick="markHard()">Hard</button>
 <select id="language" onchange="changeLanguage()">
 <option value="en">English</option>
 <option value="de">German</option>
 <option value="fa" selected>Farsi</option>
 </select>
-<button onclick="nextCard()" id="nextBtn">بعدی</button>
-<button id="hardBtn" onclick="markHard()">Hard</button>
 </div>
 
 <div class="stats" id="stats">Progress: 0% | Hard: 0</div>
@@ -246,13 +247,14 @@ function updateCard(){
 
 function flipCard(){ card.classList.toggle('flipped'); }
 function nextCard(){ card.classList.remove('flipped'); current=(current+1)%allSentences.length; updateCard(); }
+function prevCard(){ card.classList.remove('flipped'); current=(current-1+allSentences.length)%allSentences.length; updateCard(); }
 function changeLanguage(){ lang=document.getElementById('language').value; updateCard(); }
 function markHard(){ if(!hardCards.includes(current)) hardCards.push(current); updateStats(); }
 function updateStats(){ let progress=Math.round((knownCards.length/allSentences.length)*100); stats.textContent=`Progress: ${progress}% | Hard: ${hardCards.length}`; }
 function updateGuide(){
-if(lang==='fa'){ guide.textContent="روی کارت کلیک کن تا ترجمه نمایش داده شود. سپس روی 'بعدی' بزن تا جمله بعدی بیاید."; nextBtn.textContent="بعدی"; }
-else if(lang==='en'){ guide.textContent="Click on the card to see the translation. Then press 'Next' for the next sentence."; nextBtn.textContent="Next"; }
-else if(lang==='de'){ guide.textContent="Klicke auf die Karte, um die Übersetzung zu sehen. Drücke dann 'Nächste' für den nächsten Satz."; nextBtn.textContent="Nächste"; }
+if(lang==='fa'){ guide.textContent="روی کارت کلیک کن تا ترجمه نمایش داده شود. سپس روی 'بعدی' یا 'قبلی' بزن تا جمله بعدی یا قبلی بیاید."; nextBtn.textContent="بعدی"; }
+else if(lang==='en'){ guide.textContent="Click on the card to see the translation. Use 'Next' or 'Prev' to navigate."; nextBtn.textContent="Next"; }
+else if(lang==='de'){ guide.textContent="Klicke auf die Karte, um die Übersetzung zu sehen. Drücke dann 'Nächste' oder 'Zurück'."; nextBtn.textContent="Nächste"; }
 }
 function updateLanguageGuide(){
 if(lang==='fa'){ languageGuide.textContent="زبان مورد نظر خود را انتخاب کنید:"; }
