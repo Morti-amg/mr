@@ -174,16 +174,17 @@ select { background:white; color:black; border:1px solid black; }
 </div>
 <script>
 const sentences=[
-  { text:{ en:"Hello, my name is Sara.",de:"Hallo, ich heiße Sara.,",fa:" سلام، اسم من سارا است.,}
-  { text:{ en:"Do I need to go through security again for my connecting flight?", 
-          de:"Muss ich für meinen Anschlussflug nochmal durch die Sicherheitskontrolle?", 
-          fa:"برای پرواز بعدی باید دوباره از کنترل امنیت عبور کنم؟" }, difficulty:"easy" }
+  { text:{ en:"Do I need to go through security again for my connecting flight?", de:"Muss ich für meinen Anschlussflug nochmal durch die Sicherheitskontrolle?", fa:"برای پرواز بعدی باید دوباره از کنترل امنیت عبور کنم؟" }, difficulty:"easy" },
+  { text:{ en:"Can you help me with my luggage?", de:"Können Sie mir mit meinem Gepäck helfen?", fa:"می‌توانید با چمدانم کمک کنید؟" }, difficulty:"easy" },
+  { text:{ en:"Which gate is for flight number 123?", de:"Welches Gate ist für Flugnummer 123?", fa:"گیت پرواز شماره ۱۲۳ کدام است؟" }, difficulty:"easy" }
 ];
 const jokes={ en:["Why don’t programmers like nature? Too many bugs! 😂"], de:["Warum mögen Programmierer die Natur nicht? Zu viele Bugs! 🐞"], fa:["چرا برنامه‌نویس‌ها طبیعت رو دوست ندارن؟ چون پر از باگه! 🐞"] };
 const motivationalSentences={ en:["Keep going! You can do it!"], de:["Mach weiter! Du schaffst das!"], fa:["ادامه بده! تو می‌توانی!"] };
 let current=0, lang='fa', hardCards=[], allSentences=[...sentences];
 const card=document.getElementById('flashCard'), front=document.getElementById('front'), back=document.getElementById('back'), stats=document.getElementById('stats'), jokesSpan=document.getElementById('jokes'), nextBtn=document.getElementById('nextBtn'), prevBtn=document.getElementById('prevBtn'), hardBtn=document.getElementById('hardBtn'), motivationalDiv=document.getElementById('motivational'), guide=document.getElementById('guide'), languageGuide=document.getElementById('languageGuide');
+
 function fitText(el){ let size=28; el.style.fontSize=size+"px"; while(el.scrollHeight>el.clientHeight || el.scrollWidth>el.clientWidth){ size-=1; el.style.fontSize=size+"px"; if(size<12) break; } }
+
 function updateCard(){ front.textContent=allSentences[current].text[lang]; fitText(front); back.innerHTML=''; const otherLangs=['en','de','fa'].filter(l=>l!==lang); otherLangs.forEach(l=>{ const div=document.createElement('div'); div.innerHTML=`<span class="lang-text">${l.toUpperCase()}:</span> ${allSentences[current].text[l]}`; back.appendChild(div); }); fitText(back); updateStats(); updateButtons(); updateGuide(); updateLanguageGuide(); }
 function flipCard(){ card.classList.toggle('flipped'); }
 function nextCard(){ card.classList.remove('flipped'); current=(current+1)%allSentences.length; updateCard(); }
