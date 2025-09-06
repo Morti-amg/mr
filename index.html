@@ -6,138 +6,36 @@
 <title>MORTI //// AMG - Language Learning</title>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
-body {
-  font-family:'Roboto',sans-serif;
-  min-height:100vh;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  transition:background-image 1s ease-in-out;
-  color:black;
-  background-size:cover;
-  background-position:center;
-  overflow-x:hidden;
-  background-color:white;
-}
-@keyframes ledColor {
-  0% { color: #ff0000; }
-  20% { color: #00ff00; }
-  40% { color: #0000ff; }
-  60% { color: #ff00ff; }
-  80% { color: #00ffff; }
-  100% { color: #ff0000; }
-}
-header {
-  width:100%;
-  text-align:center;
-  padding:20px;
-  font-size:2.5em;
-  font-weight:bold;
-  color:black;
-  letter-spacing:3px;
-  animation: ledColor 5s infinite;
-  position:relative;
-}
-.welcome {
-  position:fixed;
-  top:0; left:0; right:0; bottom:0;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  background:rgba(255,255,255,0.95);
-  color:black;
-  font-size:1.5em;
-  text-align:center;
-  z-index:9999;
-  animation:fadeOut 5s forwards;
-  animation-delay:3s;
-}
-@keyframes fadeOut { to {opacity:0; visibility:hidden;} }
-.jokes-bar {
-  position:absolute;
-  top:80px;
-  width:100%;
-  overflow:hidden;
-  background:rgba(255,255,255,0.6);
-  white-space:nowrap;
-  padding:10px;
-  font-size:1.1em;
-  color:black;
-}
-.jokes-bar span { display:inline-block; white-space:nowrap; }
-@keyframes marquee { from { transform:translateX(100%); } to { transform:translateX(-100%); } }
-@keyframes marqueeRTL { from { transform:translateX(-100%); } to { transform:translateX(100%); } }
+body { font-family:'Roboto',sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; color:black; background-size:cover; background-position:center; overflow-x:hidden; background-color:white; }
+@keyframes ledColor { 0% {color:#ff0000;} 20% {color:#00ff00;} 40% {color:#0000ff;} 60% {color:#ff00ff;} 80% {color:#00ffff;} 100% {color:#ff0000;} }
+header { width:100%; text-align:center; padding:20px; font-size:2.5em; font-weight:bold; letter-spacing:3px; animation: ledColor 5s infinite; position:relative; z-index:1000; }
+.welcome { position:fixed; top:0; left:0; right:0; bottom:0; display:flex; justify-content:center; align-items:center; background:rgba(255,255,255,0.95); color:black; font-size:1.5em; text-align:center; z-index:9999; transition: opacity 1s; }
+.jokes-bar { width: 100%; overflow: hidden; background: rgba(255,255,255,0.9); white-space: nowrap; padding: 10px 0; font-size: 1.2em; z-index: 500; }
+.jokes-bar span { display: inline-block; padding-left: 100%; white-space: nowrap; }
+@keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+@keyframes marqueeRTL { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
 
-.card-wrapper {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 50px;
-  width: 100%;
-}
+.card-wrapper { display: flex; flex-direction: column; align-items: center; margin-top: 20px; width: 100%; padding-bottom: 60px; }
 .card-container { perspective: 1000px; }
-.card {
-  width:400px;
-  height:220px;
-  background:rgba(0,0,0,0.1);
-  border-radius:20px;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  font-size:2em;
-  cursor:pointer;
-  transition:transform 0.8s;
-  transform-style:preserve-3d;
-  box-shadow:0 8px 20px rgba(0,0,0,0.2);
-  padding:20px;
-  text-align:center;
-  color:black;
-  position: relative;
-}
+.card { width:400px; height:220px; border-radius:20px; display:flex; justify-content:center; align-items:center; font-size:2em; cursor:pointer; transition:transform 0.8s; transform-style:preserve-3d; box-shadow:0 8px 20px rgba(0,0,0,0.2); padding:20px; text-align:center; color:black; position: relative; }
 .card.flipped { transform:rotateY(180deg); }
-.card .front, .card .back {
-  position:absolute;
-  backface-visibility:hidden;
-  width:100%;
-  height:100%;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  padding:15px;
-  overflow:hidden;
-  text-align:center;
-}
+.card .front, .card .back { position:absolute; backface-visibility:hidden; width:100%; height:100%; display:flex; justify-content:center; align-items:center; padding:15px; overflow:hidden; text-align:center; border-radius:20px; }
 .card .front { font-size:2em; color:black; }
-.card .back {
-  transform:rotateY(180deg);
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-  font-size:1.3em;
-  background-color: rgba(240,240,240,0.9); /* پیش‌فرض */
-  border-radius:20px;
-}
+.card .back { transform:rotateY(180deg); display:flex; flex-direction:column; gap:8px; font-size:1.3em; background-color:#f5f5f5; }
 .card .back .lang-text { font-weight:bold; }
-.card .back .lang-text.en { color:blue; }
-.card .back .lang-text.de { color:green; }
-.card .back .lang-text.fa { color:red; }
-/* متن ترجمه */
-.card .back .translation.en { color:darkblue; }
-.card .back .translation.de { color:darkgreen; }
-.card .back .translation.fa { color:darkred; }
 
 #guide { font-size: 1em; margin-bottom: 10px; text-align:center; color:black; }
 #motivational { margin-top:10px; font-size:1.2em; text-align:center; opacity:0; transition:opacity 0.5s; }
 
 .controls { display:flex; gap:10px; align-items:center; margin-top:20px; flex-wrap:wrap; justify-content:center; }
-button, select, input { padding:8px 15px; border-radius:6px; border:none; cursor:pointer; font-size:1em; }
-button { background-color:#ff9800; color:white; }
-#hardBtn { background-color:#e91e63; }
-select { background:white; color:black; border:1px solid black; }
+button, select, input { padding:8px 15px; border-radius:6px; border:none; cursor:pointer; font-size:1em; color:black; }
+button { background-color:#f3f0ee; }
+#hardBtn { background-color:hsl(348, 22%, 95%); }
+select { background:white; border:1px solid black; }
 .stats { margin-top:15px; font-size:1em; background:rgba(0,0,0,0.1); padding:8px 12px; border-radius:10px; color:black; }
 #commentContainer { margin-top:15px; display:flex; flex-direction:column; align-items:center; gap:5px; }
 #commentInput { padding:6px; border-radius:5px; border:1px solid #ccc; width:250px; font-size:0.9em; }
-#commentBtn { background:#4caf50; color:white; font-size:0.9em; }
+#commentBtn { background:#4caf50; font-size:0.9em; }
 #commentMessage { margin-top:5px; font-size:0.9em; color:green; }
 
 #languageGuide { color:black; text-align:center; margin-bottom:5px; }
@@ -146,7 +44,7 @@ select { background:white; color:black; border:1px solid black; }
 <body>
 <header>MORTI //// AMG</header>
 
-<div class="welcome" id="welcome">سلام دوست گرامی به سایت من خوش آمدی. امیدوارم از یادگیری زبان لذت ببری</div>
+<div class="welcome" id="welcome"></div>
 
 <div class="jokes-bar"><span id="jokes"></span></div>
 
@@ -168,13 +66,11 @@ select { background:white; color:black; border:1px solid black; }
     <option value="de">German</option>
     <option value="fa" selected>Farsi</option>
   </select>
-  <button onclick="prevCard()" id="prevBtn">قبلی</button>
-  <button onclick="nextCard()" id="nextBtn">بعدی</button>
-  <button id="hardBtn" onclick="markHard()">سخت</button>
-
-  <!-- 🎨 انتخاب رنگ -->
-  <label for="colorPicker">🎨 رنگ پشت کارت:</label>
-  <input type="color" id="colorPicker" value="#f0f0f0" onchange="setBackCardColor(this.value)">
+  <button onclick="prevCard()" id="prevBtn"></button>
+  <button onclick="nextCard()" id="nextBtn"></button>
+  <button id="hardBtn" onclick="markHard()"></button>
+  <label for="backColor" id="backColorLabel"></label>
+  <input type="color" id="backColor" value="#f5f5f5" onchange="changeBackColor()">
 </div>
 
 <div class="stats" id="stats"></div>
@@ -200,12 +96,15 @@ fa:["به سفر یادگیری زبان خوش آمدید! ✨","تمرین، �
 };
 
 const motivationalSentences={
-en:["Keep going! You can do it!","Every step counts!"],
-de:["Mach weiter! Du schaffst das!","Jeder Schritt zählt!"],
-fa:["ادامه بده! تو می‌توانی!","هر قدم مهم است!"]
+en:["Keep going! You can do it!","Every step counts!","Learning a language is a journey, enjoy it!","Small progress is still progress!"],
+de:["Mach weiter! Du schaffst das!","Jeder Schritt zählt!","Eine neue Sprache öffnet neue Türen!","Kleine Fortschritte sind auch Fortschritte!"],
+fa:["ادامه بده! تو می‌توانی!","هر قدم مهم است!","هیچ وقت برای یادگیری دیر نیست!","قدم‌های کوچک هم ارزشمند هستند!"]
 };
 
+const translationColors = { en: 'green', de: 'blue', fa: 'red' };
+
 let current=0, lang='fa', hardCards=[], allSentences=[...sentences];
+let motivationalIndex=0, jokeIndex=0;
 
 const card=document.getElementById('flashCard'),
       front=document.getElementById('front'),
@@ -221,25 +120,11 @@ const card=document.getElementById('flashCard'),
       commentInput=document.getElementById('commentInput'),
       commentBtn=document.getElementById('commentBtn'),
       commentMessage=document.getElementById('commentMessage'),
-      colorPicker=document.getElementById('colorPicker');
+      backColorInput=document.getElementById('backColor'),
+      backColorLabel=document.getElementById('backColorLabel'),
+      welcomeDiv=document.getElementById('welcome');
 
-// رنگ پس‌زمینه پیش‌فرض پشت کارت
-let backCardColor = colorPicker.value;
-
-// تابع تغییر رنگ پشت کارت
-function setBackCardColor(color){
-  backCardColor = color;
-  back.style.backgroundColor = backCardColor;
-}
-
-function fitText(el){
-  let size=28;
-  el.style.fontSize=size+"px";
-  while((el.scrollHeight>el.clientHeight || el.scrollWidth>el.clientWidth) && size>12){
-    size-=1;
-    el.style.fontSize=size+"px";
-  }
-}
+function fitText(el){ let size=28; el.style.fontSize=size+"px"; while((el.scrollHeight>el.clientHeight || el.scrollWidth>el.clientWidth) && size>12){ size-=1; el.style.fontSize=size+"px"; } }
 
 function updateCard(){
   front.textContent=allSentences[current].text[lang];
@@ -248,88 +133,34 @@ function updateCard(){
   const otherLangs=['en','de','fa'].filter(l=>l!==lang);
   otherLangs.forEach(l=>{
     const div=document.createElement('div');
-    div.innerHTML=`<span class="lang-text ${l}">${l.toUpperCase()}:</span> <span class="translation ${l}">${allSentences[current].text[l]}</span>`;
+    div.innerHTML=`<span class="lang-text">${l.toUpperCase()}:</span> <span class="translation" style="color:${translationColors[l]}">${allSentences[current].text[l]}</span>`;
     back.appendChild(div);
   });
-  back.style.backgroundColor = backCardColor; // اعمال رنگ
+  if(!back.style.backgroundColor) back.style.backgroundColor = backColorInput.value;
   fitText(back);
-  updateStats();
-  updateButtons();
-  updateGuide();
-  updateLanguageGuide();
-  updateCommentUI();
+  updateStats(); updateButtons(); updateGuide(); updateLanguageGuide(); updateCommentUI(); updateBackColorLabel();
 }
 
 function flipCard(){ card.classList.toggle('flipped'); }
 function nextCard(){ card.classList.remove('flipped'); current=(current+1)%allSentences.length; updateCard(); }
 function prevCard(){ card.classList.remove('flipped'); current=(current-1+allSentences.length)%allSentences.length; updateCard(); }
-
-function changeLanguage(){
-  lang=document.getElementById('language').value;
-  updateCard();
-  initJokes();
-}
-
+function changeLanguage(){ lang=document.getElementById('language').value; updateCard(); initJokes(); showWelcome(); }
 function markHard(){ if(!hardCards.includes(current)) hardCards.push(current); updateStats(); }
+function updateStats(){ if(lang==='fa') stats.textContent=`پیشرفت: 0% | سخت: ${hardCards.length}`; else if(lang==='en') stats.textContent=`Progress: 0% | Hard: ${hardCards.length}`; else stats.textContent=`Fortschritt: 0% | Schwer: ${hardCards.length}`; }
+function updateButtons(){ if(lang==='fa'){ nextBtn.textContent="بعدی"; prevBtn.textContent="قبلی"; hardBtn.textContent="سخت"; } else if(lang==='en'){ nextBtn.textContent="Next"; prevBtn.textContent="Previous"; hardBtn.textContent="Hard"; } else { nextBtn.textContent="Nächste"; prevBtn.textContent="Vorherige"; hardBtn.textContent="Schwer"; } }
+function updateGuide(){ if(lang==='fa') guide.textContent="روی کارت کلیک کن تا ترجمه نمایش داده شود"; else if(lang==='en') guide.textContent="Click on the card to see the translation."; else guide.textContent="Klicke auf die Karte, um die Übersetzung zu sehen."; }
+function updateLanguageGuide(){ if(lang==='fa') languageGuide.textContent="زبان مورد نظر خود را انتخاب کنید:"; else if(lang==='en') languageGuide.textContent="Select your preferred language:"; else languageGuide.textContent="Wähle deine Sprache:"; }
+function updateBackColorLabel(){ const labels={ fa:'🎨 رنگ پشت کارت:', en:'🎨 Choose back card color:', de:'🎨 Hinterkartefarbe wählen:' }; backColorLabel.textContent = labels[lang]; }
+function initJokes(){ jokeIndex=0; showNextJoke(); }
+function showNextJoke(){ const currentJokes=jokes[lang]; jokesSpan.textContent=currentJokes[jokeIndex]; jokesSpan.style.animation='none'; void jokesSpan.offsetWidth; if(lang==='fa'){ jokesSpan.style.animation='marqueeRTL 20s linear'; } else { jokesSpan.style.animation='marquee 20s linear'; } jokesSpan.addEventListener('animationend', ()=>{ jokeIndex=(jokeIndex+1)%currentJokes.length; showNextJoke(); }, {once:true}); }
+function showMotivational(){ const sentences=motivationalSentences[lang]; motivationalDiv.textContent=sentences[motivationalIndex]; motivationalDiv.style.opacity='1'; setTimeout(()=>{ motivationalDiv.style.opacity='0'; },4000); motivationalIndex=(motivationalIndex+1)%sentences.length; }
+setInterval(showMotivational,30000); setTimeout(showMotivational,1000);
+function updateCommentUI(){ if(lang==='fa'){ commentInput.placeholder="نظر خود را وارد کنید"; commentBtn.textContent="ثبت نظر"; } else if(lang==='en'){ commentInput.placeholder="Enter your comment"; commentBtn.textContent="Submit Comment"; } else { commentInput.placeholder="Geben Sie Ihren Kommentar ein"; commentBtn.textContent="Kommentar senden"; } }
+function submitComment(){ if(commentInput.value.trim()==='') return; let msg=''; if(lang==='fa') msg='نظر شما ثبت شد ✅'; else if(lang==='en') msg='Your comment has been submitted ✅'; else msg='Ihr Kommentar wurde gespeichert ✅'; commentMessage.textContent=msg; commentInput.value=''; setTimeout(()=>{ commentMessage.textContent=''; },3000); }
+function changeBackColor(){ back.style.backgroundColor = backColorInput.value; }
+function showWelcome() { const messages = { fa: "سلام دوست گرامی به سایت من خوش آمدی. امیدوارم از یادگیری زبان لذت ببری", en: "Hello! Welcome to the site. Hope you enjoy learning languages!", de: "Hallo! Willkommen auf der Seite. Viel Spaß beim Sprachenlernen!" }; welcomeDiv.textContent = messages[lang]; welcomeDiv.style.display = 'flex'; welcomeDiv.style.opacity = '1'; setTimeout(() => { welcomeDiv.style.opacity = '0'; }, 3000); setTimeout(() => { welcomeDiv.style.display = 'none'; }, 5000); }
 
-function updateStats(){
-  if(lang==='fa') stats.textContent=`پیشرفت: 0% | سخت: ${hardCards.length}`;
-  else if(lang==='en') stats.textContent=`Progress: 0% | Hard: ${hardCards.length}`;
-  else stats.textContent=`Fortschritt: 0% | Schwer: ${hardCards.length}`;
-}
-
-function updateButtons(){
-  if(lang==='fa'){ nextBtn.textContent="بعدی"; prevBtn.textContent="قبلی"; hardBtn.textContent="سخت"; }
-  else if(lang==='en'){ nextBtn.textContent="Next"; prevBtn.textContent="Previous"; hardBtn.textContent="Hard"; }
-  else { nextBtn.textContent="Nächste"; prevBtn.textContent="Vorherige"; hardBtn.textContent="Schwer"; }
-}
-
-function updateGuide(){
-  if(lang==='fa') guide.textContent="روی کارت کلیک کن تا ترجمه نمایش داده شود";
-  else if(lang==='en') guide.textContent="Click on the card to see the translation.";
-  else guide.textContent="Klicke auf die Karte, um die Übersetzung zu sehen.";
-}
-
-function updateLanguageGuide(){
-  if(lang==='fa') languageGuide.textContent="زبان مورد نظر خود را انتخاب کنید:";
-  else if(lang==='en') languageGuide.textContent="Select your preferred language:";
-  else languageGuide.textContent="Wähle deine Sprache:";
-}
-
-function initJokes(){
-  jokesSpan.textContent=jokes[lang].join("   ⚡   ");
-  if(lang==='fa'){ jokesSpan.style.animation='marqueeRTL 20s linear infinite'; }
-  else{ jokesSpan.style.animation='marquee 20s linear infinite'; }
-}
-
-function showMotivational(){
-  const sentence=motivationalSentences[lang][Math.floor(Math.random()*motivationalSentences[lang].length)];
-  motivationalDiv.textContent=sentence;
-  motivationalDiv.style.opacity='1';
-  setTimeout(()=>{motivationalDiv.style.opacity='0';},4000);
-}
-setInterval(showMotivational,60000);
-setTimeout(showMotivational,1000);
-
-function updateCommentUI(){
-  if(lang==='fa'){ commentInput.placeholder="نظر خود را وارد کنید"; commentBtn.textContent="ثبت نظر"; }
-  else if(lang==='en'){ commentInput.placeholder="Enter your comment"; commentBtn.textContent="Submit Comment"; }
-  else { commentInput.placeholder="Geben Sie Ihren Kommentar ein"; commentBtn.textContent="Kommentar senden"; }
-}
-
-function submitComment(){
-  if(commentInput.value.trim()==='') return;
-  let msg='';
-  if(lang==='fa') msg='نظر شما ثبت شد ✅';
-  else if(lang==='en') msg='Your comment has been submitted ✅';
-  else msg='Ihr Kommentar wurde gespeichert ✅';
-  commentMessage.textContent=msg;
-  commentInput.value='';
-  setTimeout(()=>{ commentMessage.textContent=''; },3000);
-}
-
-updateCard();
-initJokes();
+updateCard(); initJokes(); showWelcome();
 </script>
 </body>
 </html>
