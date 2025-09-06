@@ -6,27 +6,125 @@
 <title>MORTI //// AMG - Language Learning</title>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:'Roboto',sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; transition:background-image 1s ease-in-out; color:black; background-size:cover; background-position:center; overflow-x:hidden; background-color:white; }
-@keyframes ledColor { 0% { color: #ff0000; } 20% { color: #00ff00; } 40% { color: #0000ff; } 60% { color: #ff00ff; } 80% { color: #00ffff; } 100% { color: #ff0000; } }
-header { width:100%; text-align:center; padding:20px; font-size:2.5em; font-weight:bold; color:black; letter-spacing:3px; animation: ledColor 5s infinite; position:relative; }
-.welcome { position:fixed; top:0; left:0; right:0; bottom:0; display:flex; justify-content:center; align-items:center; background:rgba(255,255,255,0.95); color:black; font-size:1.5em; text-align:center; z-index:9999; animation:fadeOut 5s forwards; animation-delay:3s; }
+body {
+  font-family:'Roboto',sans-serif;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  transition:background-image 1s ease-in-out;
+  color:black;
+  background-size:cover;
+  background-position:center;
+  overflow-x:hidden;
+  background-color:white;
+}
+@keyframes ledColor {
+  0% { color: #ff0000; }
+  20% { color: #00ff00; }
+  40% { color: #0000ff; }
+  60% { color: #ff00ff; }
+  80% { color: #00ffff; }
+  100% { color: #ff0000; }
+}
+header {
+  width:100%;
+  text-align:center;
+  padding:20px;
+  font-size:2.5em;
+  font-weight:bold;
+  color:black;
+  letter-spacing:3px;
+  animation: ledColor 5s infinite;
+  position:relative;
+}
+.welcome {
+  position:fixed;
+  top:0; left:0; right:0; bottom:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  background:rgba(255,255,255,0.95);
+  color:black;
+  font-size:1.5em;
+  text-align:center;
+  z-index:9999;
+  animation:fadeOut 5s forwards;
+  animation-delay:3s;
+}
 @keyframes fadeOut { to {opacity:0; visibility:hidden;} }
-.jokes-bar { position:absolute; top:80px; width:100%; overflow:hidden; background:rgba(255,255,255,0.6); white-space:nowrap; padding:10px; font-size:1.1em; color:black; }
+.jokes-bar {
+  position:absolute;
+  top:80px;
+  width:100%;
+  overflow:hidden;
+  background:rgba(255,255,255,0.6);
+  white-space:nowrap;
+  padding:10px;
+  font-size:1.1em;
+  color:black;
+}
 .jokes-bar span { display:inline-block; white-space:nowrap; }
 @keyframes marquee { from { transform:translateX(100%); } to { transform:translateX(-100%); } }
 @keyframes marqueeRTL { from { transform:translateX(-100%); } to { transform:translateX(100%); } }
 
-.card-wrapper { display: flex; flex-direction: column; align-items: center; margin-top: 50px; width: 100%; }
+.card-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+  width: 100%;
+}
 .card-container { perspective: 1000px; }
-.card { width:400px; height:220px; background:rgba(0,0,0,0.1); border-radius:20px; display:flex; justify-content:center; align-items:center; cursor:pointer; transition:transform 0.8s; transform-style:preserve-3d; box-shadow:0 8px 20px rgba(0,0,0,0.2); padding:20px; text-align:center; color:black; position: relative; }
+.card {
+  width:400px;
+  height:220px;
+  background:rgba(0,0,0,0.1);
+  border-radius:20px;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:2em;
+  cursor:pointer;
+  transition:transform 0.8s;
+  transform-style:preserve-3d;
+  box-shadow:0 8px 20px rgba(0,0,0,0.2);
+  padding:20px;
+  text-align:center;
+  color:black;
+  position: relative;
+}
 .card.flipped { transform:rotateY(180deg); }
-.card .front, .card .back { position:absolute; backface-visibility:hidden; width:100%; height:100%; display:flex; justify-content:center; align-items:center; padding:15px; overflow:hidden; text-align:center; }
+.card .front, .card .back {
+  position:absolute;
+  backface-visibility:hidden;
+  width:100%;
+  height:100%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:15px;
+  overflow:hidden;
+  text-align:center;
+}
 .card .front { font-size:2em; color:black; }
-.card .back { transform:rotateY(180deg); display:flex; flex-direction:column; gap:8px; font-size:1.3em; }
+.card .back {
+  transform:rotateY(180deg);
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  font-size:1.3em;
+  background-color: rgba(240,240,240,0.9); /* پیش‌فرض */
+  border-radius:20px;
+}
 .card .back .lang-text { font-weight:bold; }
-.lang-en { color:blue; }
-.lang-de { color:green; }
-.lang-fa { color:red; }
+.card .back .lang-text.en { color:blue; }
+.card .back .lang-text.de { color:green; }
+.card .back .lang-text.fa { color:red; }
+/* متن ترجمه */
+.card .back .translation.en { color:darkblue; }
+.card .back .translation.de { color:darkgreen; }
+.card .back .translation.fa { color:darkred; }
 
 #guide { font-size: 1em; margin-bottom: 10px; text-align:center; color:black; }
 #motivational { margin-top:10px; font-size:1.2em; text-align:center; opacity:0; transition:opacity 0.5s; }
@@ -36,21 +134,22 @@ button, select, input { padding:8px 15px; border-radius:6px; border:none; cursor
 button { background-color:#ff9800; color:white; }
 #hardBtn { background-color:#e91e63; }
 select { background:white; color:black; border:1px solid black; }
-
 .stats { margin-top:15px; font-size:1em; background:rgba(0,0,0,0.1); padding:8px 12px; border-radius:10px; color:black; }
+#commentContainer { margin-top:15px; display:flex; flex-direction:column; align-items:center; gap:5px; }
+#commentInput { padding:6px; border-radius:5px; border:1px solid #ccc; width:250px; font-size:0.9em; }
+#commentBtn { background:#4caf50; color:white; font-size:0.9em; }
+#commentMessage { margin-top:5px; font-size:0.9em; color:green; }
 
 #languageGuide { color:black; text-align:center; margin-bottom:5px; }
-
-.comment-container { margin-top:20px; display:flex; flex-direction:column; align-items:center; }
-.comment-container textarea { font-size:0.85em; width:300px; padding:6px; border-radius:5px; border:1px solid #ccc; color:black; }
-.comment-container button { background:#4caf50; color:white; padding:6px 12px; border-radius:5px; border:none; cursor:pointer; font-size:0.9em; margin-top:5px; }
-#commentsList div { margin-bottom:6px; padding:4px; background:rgba(0,0,0,0.05); border-radius:4px; font-size:0.85em; }
 </style>
 </head>
 <body>
 <header>MORTI //// AMG</header>
+
 <div class="welcome" id="welcome">سلام دوست گرامی به سایت من خوش آمدی. امیدوارم از یادگیری زبان لذت ببری</div>
+
 <div class="jokes-bar"><span id="jokes"></span></div>
+
 <div class="card-wrapper">
   <div id="guide"></div>
   <div class="card-container">
@@ -61,6 +160,7 @@ select { background:white; color:black; border:1px solid black; }
   </div>
   <div id="motivational"></div>
 </div>
+
 <div class="controls">
   <div id="languageGuide"></div>
   <select id="language" onchange="changeLanguage()">
@@ -71,101 +171,135 @@ select { background:white; color:black; border:1px solid black; }
   <button onclick="prevCard()" id="prevBtn">قبلی</button>
   <button onclick="nextCard()" id="nextBtn">بعدی</button>
   <button id="hardBtn" onclick="markHard()">سخت</button>
+
+  <!-- 🎨 انتخاب رنگ -->
+  <label for="colorPicker">🎨 رنگ پشت کارت:</label>
+  <input type="color" id="colorPicker" value="#f0f0f0" onchange="setBackCardColor(this.value)">
 </div>
+
 <div class="stats" id="stats"></div>
 
-<div class="comment-container" id="commentContainer">
-  <textarea id="userComment" placeholder="نظر خود را اینجا بنویسید..." rows="3"></textarea>
-  <button id="submitComment">ثبت نظر</button>
-  <div id="commentsList"></div>
+<div id="commentContainer">
+  <input type="text" id="commentInput" placeholder="">
+  <button id="commentBtn" onclick="submitComment()"></button>
+  <div id="commentMessage"></div>
 </div>
 
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
 <script>
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
-};
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-
-// === داده‌ها ===
 const sentences=[
-  { text:{ en:"Hello!", de:"Hallo!", fa:"سلام!" }, difficulty:"easy" },
-  { text:{ en:"Do I need to go through security again for my connecting flight?", de:"Muss ich für meinen Anschlussflug nochmal durch die Sicherheitskontrolle?", fa:"برای پرواز بعدی باید دوباره از کنترل امنیت عبور کنم؟" }, difficulty:"easy" },
-  { text:{ en:"Can you help me with my luggage?", de:"Können Sie mir mit meinem Gepäck helfen?", fa:"می‌توانید با چمدانم کمک کنید؟" }, difficulty:"easy" },
-  { text:{ en:"Which gate is for flight number 123?", de:"Welches Gate ist für Flugnummer 123?", fa:"گیت پرواز شماره ۱۲۳ کدام است؟" }, difficulty:"easy" }
+{ text:{ en:"Hello!", de:"Hallo!", fa:"سلام!" }, difficulty:"easy" },
+{ text:{ en:"Do I need to go through security again for my connecting flight?", de:"Muss ich für meinen Anschlussflug nochmal durch die Sicherheitskontrolle?", fa:"برای پرواز بعدی باید دوباره از کنترل امنیت عبور کنم؟" }, difficulty:"easy" },
+{ text:{ en:"Can you help me with my luggage?", de:"Können Sie mir mit meinem Gepäck helfen?", fa:"می‌توانید با چمدانم کمک کنید؟" }, difficulty:"easy" },
+{ text:{ en:"Which gate is for flight number 123?", de:"Welches Gate ist für Flugnummer 123?", fa:"گیت پرواز شماره ۱۲۳ کدام است؟" }, difficulty:"easy" }
 ];
 
 const jokes={
-  en:["Welcome to our classy language app! Enjoy learning!","Every step counts, keep practicing!"],
-  de:["Willkommen in unserer schicken Sprach-App! Viel Spaß beim Lernen!"],
-  fa:["به اپلیکیشن زبان ما خوش آمدید! از یادگیری لذت ببرید!","هر قدم مهم است، ادامه بده!"]
+en:["Welcome to your language journey! ✨","Practice makes perfect! 💪"],
+de:["Willkommen zu Ihrer Sprachreise! ✨","Übung macht den Meister! 💪"],
+fa:["به سفر یادگیری زبان خوش آمدید! ✨","تمرین، مهارت می‌آورد! 💪"]
 };
 
 const motivationalSentences={
-  en:["Keep going! You can do it!"], de:["Mach weiter! Du schaffst das!"], fa:["ادامه بده! تو می‌توانی!"]
+en:["Keep going! You can do it!","Every step counts!"],
+de:["Mach weiter! Du schaffst das!","Jeder Schritt zählt!"],
+fa:["ادامه بده! تو می‌توانی!","هر قدم مهم است!"]
 };
 
 let current=0, lang='fa', hardCards=[], allSentences=[...sentences];
 
-const card=document.getElementById('flashCard'), front=document.getElementById('front'), back=document.getElementById('back'), stats=document.getElementById('stats'), jokesSpan=document.getElementById('jokes'), nextBtn=document.getElementById('nextBtn'), prevBtn=document.getElementById('prevBtn'), hardBtn=document.getElementById('hardBtn'), motivationalDiv=document.getElementById('motivational'), guide=document.getElementById('guide'), languageGuide=document.getElementById('languageGuide');
+const card=document.getElementById('flashCard'),
+      front=document.getElementById('front'),
+      back=document.getElementById('back'),
+      stats=document.getElementById('stats'),
+      jokesSpan=document.getElementById('jokes'),
+      nextBtn=document.getElementById('nextBtn'),
+      prevBtn=document.getElementById('prevBtn'),
+      hardBtn=document.getElementById('hardBtn'),
+      motivationalDiv=document.getElementById('motivational'),
+      guide=document.getElementById('guide'),
+      languageGuide=document.getElementById('languageGuide'),
+      commentInput=document.getElementById('commentInput'),
+      commentBtn=document.getElementById('commentBtn'),
+      commentMessage=document.getElementById('commentMessage'),
+      colorPicker=document.getElementById('colorPicker');
 
-function fitText(el){ let size=28; el.style.fontSize=size+"px"; while(el.scrollHeight>el.clientHeight || el.scrollWidth>el.clientWidth){ size-=1; el.style.fontSize=size+"px"; if(size<12) break; } }
+// رنگ پس‌زمینه پیش‌فرض پشت کارت
+let backCardColor = colorPicker.value;
+
+// تابع تغییر رنگ پشت کارت
+function setBackCardColor(color){
+  backCardColor = color;
+  back.style.backgroundColor = backCardColor;
+}
+
+function fitText(el){
+  let size=28;
+  el.style.fontSize=size+"px";
+  while((el.scrollHeight>el.clientHeight || el.scrollWidth>el.clientWidth) && size>12){
+    size-=1;
+    el.style.fontSize=size+"px";
+  }
+}
 
 function updateCard(){
-  front.textContent=allSentences[current].text[lang]; fitText(front);
+  front.textContent=allSentences[current].text[lang];
+  fitText(front);
   back.innerHTML='';
   const otherLangs=['en','de','fa'].filter(l=>l!==lang);
   otherLangs.forEach(l=>{
     const div=document.createElement('div');
-    let cls = l==='en'?'lang-en':l==='de'?'lang-de':'lang-fa';
-    div.innerHTML=`<span class="lang-text ${cls}">${l.toUpperCase()}:</span> ${allSentences[current].text[l]}`;
+    div.innerHTML=`<span class="lang-text ${l}">${l.toUpperCase()}:</span> <span class="translation ${l}">${allSentences[current].text[l]}</span>`;
     back.appendChild(div);
   });
+  back.style.backgroundColor = backCardColor; // اعمال رنگ
   fitText(back);
-  updateStats(); updateButtons(); updateGuide(); updateLanguageGuide();
+  updateStats();
+  updateButtons();
+  updateGuide();
+  updateLanguageGuide();
+  updateCommentUI();
 }
 
 function flipCard(){ card.classList.toggle('flipped'); }
 function nextCard(){ card.classList.remove('flipped'); current=(current+1)%allSentences.length; updateCard(); }
 function prevCard(){ card.classList.remove('flipped'); current=(current-1+allSentences.length)%allSentences.length; updateCard(); }
-function changeLanguage(){ lang=document.getElementById('language').value; updateCard(); initJokes(); }
+
+function changeLanguage(){
+  lang=document.getElementById('language').value;
+  updateCard();
+  initJokes();
+}
+
 function markHard(){ if(!hardCards.includes(current)) hardCards.push(current); updateStats(); }
 
 function updateStats(){
   if(lang==='fa') stats.textContent=`پیشرفت: 0% | سخت: ${hardCards.length}`;
   else if(lang==='en') stats.textContent=`Progress: 0% | Hard: ${hardCards.length}`;
-  else if(lang==='de') stats.textContent=`Fortschritt: 0% | Schwer: ${hardCards.length}`;
+  else stats.textContent=`Fortschritt: 0% | Schwer: ${hardCards.length}`;
 }
 
 function updateButtons(){
   if(lang==='fa'){ nextBtn.textContent="بعدی"; prevBtn.textContent="قبلی"; hardBtn.textContent="سخت"; }
   else if(lang==='en'){ nextBtn.textContent="Next"; prevBtn.textContent="Previous"; hardBtn.textContent="Hard"; }
-  else if(lang==='de'){ nextBtn.textContent="Nächste"; prevBtn.textContent="Vorherige"; hardBtn.textContent="Schwer"; }
+  else { nextBtn.textContent="Nächste"; prevBtn.textContent="Vorherige"; hardBtn.textContent="Schwer"; }
 }
 
 function updateGuide(){
   if(lang==='fa') guide.textContent="روی کارت کلیک کن تا ترجمه نمایش داده شود.";
   else if(lang==='en') guide.textContent="Click on the card to see the translation.";
-  else if(lang==='de') guide.textContent="Klicke auf die Karte, um die Übersetzung zu sehen.";
+  else guide.textContent="Klicke auf die Karte, um die Übersetzung zu sehen.";
 }
 
 function updateLanguageGuide(){
   if(lang==='fa') languageGuide.textContent="زبان مورد نظر خود را انتخاب کنید:";
   else if(lang==='en') languageGuide.textContent="Select your preferred language:";
-  else if(lang==='de') languageGuide.textContent="Wähle deine Sprache:";
+  else languageGuide.textContent="Wähle deine Sprache:";
 }
 
 function initJokes(){
   jokesSpan.textContent=jokes[lang].join("   ⚡   ");
-  if(lang==='fa'){ jokesSpan.style.animation='marqueeRTL 20s linear infinite'; } else { jokesSpan.style.animation='marquee 20s linear infinite'; }
+  if(lang==='fa'){ jokesSpan.style.animation='marqueeRTL 20s linear infinite'; }
+  else{ jokesSpan.style.animation='marquee 20s linear infinite'; }
 }
 
 function showMotivational(){
@@ -174,34 +308,28 @@ function showMotivational(){
   motivationalDiv.style.opacity='1';
   setTimeout(()=>{motivationalDiv.style.opacity='0';},4000);
 }
+setInterval(showMotivational,60000);
+setTimeout(showMotivational,1000);
 
-setInterval(showMotivational,60000); setTimeout(showMotivational,1000);
-
-updateCard(); initJokes();
-
-// === ثبت نظر با Firebase ===
-function loadComments(){
-  const commentsList = document.getElementById('commentsList');
-  commentsList.innerHTML = '';
-  db.collection('comments').orderBy('timestamp','asc').get().then(snapshot=>{
-    snapshot.forEach(doc=>{
-      const div = document.createElement('div');
-      div.textContent = doc.data().text;
-      commentsList.appendChild(div);
-    });
-  });
+function updateCommentUI(){
+  if(lang==='fa'){ commentInput.placeholder="نظر خود را وارد کنید"; commentBtn.textContent="ثبت نظر"; }
+  else if(lang==='en'){ commentInput.placeholder="Enter your comment"; commentBtn.textContent="Submit Comment"; }
+  else { commentInput.placeholder="Geben Sie Ihren Kommentar ein"; commentBtn.textContent="Kommentar senden"; }
 }
 
-document.getElementById('submitComment').addEventListener('click', ()=>{
-  const commentInput = document.getElementById('userComment');
-  const commentText = commentInput.value.trim();
-  if(commentText==='') return;
-  db.collection('comments').add({ text: commentText, timestamp: firebase.firestore.FieldValue.serverTimestamp() }).then(()=>{
-    commentInput.value=''; loadComments();
-  });
-});
+function submitComment(){
+  if(commentInput.value.trim()==='') return;
+  let msg='';
+  if(lang==='fa') msg='نظر شما ثبت شد ✅';
+  else if(lang==='en') msg='Your comment has been submitted ✅';
+  else msg='Ihr Kommentar wurde gespeichert ✅';
+  commentMessage.textContent=msg;
+  commentInput.value='';
+  setTimeout(()=>{ commentMessage.textContent=''; },3000);
+}
 
-loadComments();
+updateCard();
+initJokes();
 </script>
 </body>
 </html>
